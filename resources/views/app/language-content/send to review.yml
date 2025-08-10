@@ -1,0 +1,38 @@
+send to review
+save
+approve & publish
+reject
+
+writer:
+[editing]
+   - send to review
+   - save
+[review]
+   - empty
+[published/approved]
+   - send to review
+   - save
+[rejected]
+   - send to review
+   - save
+[draft]
+   - send to review
+   - save
+
+superadmin:
+[editing]
+   - check is sess uid  with created_by
+[review]
+   - empty
+[published/approved]
+   - approve & publish
+   - save
+[rejected]
+   - approve & publish
+   - save
+[draft]
+   - approve & publish
+   - save
+
+check is current session is writer
+except superadmin role
