@@ -1092,7 +1092,7 @@ h6 {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  padding: 160px 0 80px 0;
+  padding: 300px 0 80px 0;
   text-align: center;
   position: relative;
 }
@@ -1143,6 +1143,14 @@ section,
   scroll-margin-top: 72px;
   overflow: clip;
 }
+/* sectiont,
+.sectiont {
+  color: var(--default-color);
+  background-color: var(--background-color);
+  padding: 60px 0;
+  scroll-margin-top: 72px;
+  overflow: clip;
+} */
 
 @media (max-width: 1199px) {
 
@@ -1244,15 +1252,15 @@ section,
 
 .hero .hero-badge {
   display: inline-block;
-  padding: 8px 20px;
+  /* padding: 8px 20px; */
   background: color-mix(in srgb, var(--accent-color), transparent 20%);
   color: var(--contrast-color);
-  font-size: 14px;
-  font-weight: 600;
+  /* font-size: 14px; */
+  /* font-weight: 600; */
   text-transform: uppercase;
-  letter-spacing: 1px;
-  border-radius: 50px;
-  margin-bottom: 20px;
+  /* letter-spacing: 1px; */
+  /* border-radius: 50px; */
+  /* margin-bottom: 20px; */
   backdrop-filter: blur(10px);
   border: 1px solid color-mix(in srgb, var(--accent-color), transparent 60%);
 }
@@ -1582,7 +1590,7 @@ section,
 
 .about .image-wrapper {
   position: relative;
-  padding-left: 20px;
+  /* padding-left: 20px; */
 }
 
 @media (max-width: 992px) {
@@ -1781,7 +1789,7 @@ section,
 
 .featured-services .services-image {
   position: relative;
-  height: 380px;
+  /* height: 380px; */
   display: flex;
   justify-content: flex-end;
 }

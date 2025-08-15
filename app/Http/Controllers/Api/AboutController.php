@@ -8,7 +8,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class KeyValueController extends Controller
+class AboutController extends Controller
 {
 
   /* #region postGet */

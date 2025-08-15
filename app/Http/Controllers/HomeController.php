@@ -28,11 +28,20 @@ class HomeController extends Controller
      */
     public function index(Request $request)
     {
-        echo $request->path();
-        if (view()->exists($request->path())) {
-            return view($request->path());
+        $path = $request->path();
+
+        // Kalau root path "/" → arahkan ke 'home'
+        if ($path === '/') {
+            return view('home', ['title' => 'Halaman Utama']);
         }
-        // return abort(404);
+
+        // Jika view sesuai path ada, tampilkan
+        if (view()->exists($path)) {
+            return view($path);
+        }
+
+        // Kalau tidak ada, 404
+        return abort(404);
     }
 
     public function root()

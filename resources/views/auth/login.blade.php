@@ -1,8 +1,4 @@
-@extends('layouts.master-without-nav')
-@section('title')
-@lang('translation.signin')
-@endsection
-@section('content')
+
 <div class="auth-page-wrapper pt-5">
 	<!-- auth page bg -->
 	<div class="auth-one-bg-position auth-one-bg" id="auth-particles">
@@ -125,10 +121,3 @@
 	</footer>
 	<!-- end Footer -->
 </div>
-@endsection
-@section('script')
-<script src="{{ URL::asset('build/libs/particles.js/particles.js') }}"></script>
-<script src="{{ URL::asset('build/js/pages/particles.app.js') }}"></script>
-<script src="{{ URL::asset('build/js/pages/password-addon.init.js') }}"></script>
-
-@endsection

@@ -16,7 +16,7 @@ if (!function_exists('timeago')) {
 }
 
 if (!function_exists('uploadImageFilepond')) {
-  function uploadImageFilepond($data, $filename = null, $disk, $withThumbnail = true, $exts = null)
+  function uploadImageFilepond($disk, $data, $filename = null, $withThumbnail = true, $exts = null)
   {
     $file = json_decode($data);
     if($exts == null) {
