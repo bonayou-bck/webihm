@@ -32,11 +32,27 @@
     </a>
   </li>
 
+  {{-- Sertifikat --}}
+  <li class="nav-item {{ request()->routeIs('admin.sertifikat') ? 'active' : '' }}">
+    <a href="{{ route('admin.sertifikat') }}">
+      <i class="far fa-newspaper"></i>
+      <p>Sertifikat</p>
+    </a>
+  </li>
+
   {{-- Keberlanjutan (pakai route landing yg sudah ada) --}}
-  <li class="nav-item {{ request()->routeIs('pages.keberlanjutan') ? 'active' : '' }}">
-    <a href="{{ route('pages.keberlanjutan') }}">
+  <li class="nav-item {{ request()->routeIs('admin.keberlanjutan') ? 'active' : '' }}">
+    <a href="{{ route('admin.keberlanjutan') }}">
       <i class="fas fa-leaf"></i>
       <p>Keberlanjutan</p>
+    </a>
+  </li>
+  
+  {{-- Fasilitas (pakai route landing yg sudah ada) --}}
+  <li class="nav-item {{ request()->routeIs('admin.fasilitas') ? 'active' : '' }}">
+    <a href="{{ route('admin.fasilitas') }}">
+      <i class="fas fa-leaf"></i>
+      <p>Fasilitas</p>
     </a>
   </li>
 </ul>

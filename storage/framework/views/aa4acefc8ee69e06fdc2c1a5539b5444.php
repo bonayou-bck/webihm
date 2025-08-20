@@ -30,7 +30,8 @@
             <li><a href="<?php echo e(route('pages.tentang')); ?>">Tentang</a></li>
             <li><a href="<?php echo e(route('pages.sertifikat')); ?>">Sertifikat</a></li>
             <li><a href="<?php echo e(route('pages.keberlanjutan')); ?>">Keberkelanjutan</a></li>
-            <li><a href="#">Karir</a></li>
+            <li><a href="<?php echo e(route('pages.fasilitas')); ?>">Fasilitas</a></li>
+            <li><a href="https://career.itcihutanimanunggal.co.id/login">Karir</a></li>
             <li><a href="<?php echo e(route('berita')); ?>">Berita</a></li>
           </ul>
           <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>

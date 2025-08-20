@@ -25,7 +25,7 @@
 
       <ul class="navbar-nav topbar-nav ms-md-auto align-items-center">
         {{-- Notif (dummy) --}}
-        <li class="nav-item topbar-icon dropdown hidden-caret">
+        {{-- <li class="nav-item topbar-icon dropdown hidden-caret">
           <a class="nav-link dropdown-toggle" href="#" id="notifDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <i class="fa fa-bell"></i><span class="notification">4</span>
           </a>
@@ -41,7 +41,7 @@
             </li>
             <li><a class="see-all" href="javascript:void(0);">See all notifications<i class="fa fa-angle-right"></i></a></li>
           </ul>
-        </li>
+        </li> --}}
 
         {{-- User --}}
         <li class="nav-item topbar-user dropdown hidden-caret">

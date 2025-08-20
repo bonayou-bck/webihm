@@ -1139,7 +1139,7 @@ section,
 .section {
   color: var(--default-color);
   background-color: var(--background-color);
-  padding: 60px 0;
+  padding: 60px 20;
   scroll-margin-top: 72px;
   overflow: clip;
 }
@@ -1665,7 +1665,7 @@ section,
 --------------------------------------------------------------*/
 .clients {
   padding-top: 0px;
-  padding-bottom: 20px;
+  padding-bottom: 60px;
 }
 
 .clients .clients-slider {
@@ -1694,12 +1694,38 @@ section,
   justify-content: center;
   align-items: center;
   overflow: hidden;
-  padding: 20px;
+  padding: 00px;
   height: 100%;
 }
 
+
+.client-logo {
+  margin: 0 !important;
+  padding: 0 !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.client-logo img {
+  width: 200px !important;
+  height: 160px !important;
+  object-fit: contain;   /* atau cover */
+  display: block;
+}
+
+/* Samakan ukuran semua logo client */
 .clients .client-logo img {
-  max-width: 90%;
+  width: 200px;       /* lebar tetap */
+  height: 160px;      /* tinggi tetap */
+  object-fit: contain; /* gambar tetap proporsional tanpa pecah */
+  object-position: center;
+  display: block;
+  margin: 0 auto;     /* center horizontal */
+}
+
+.clients .client-logo img {
+  max-width: 50%;
   transition: 0.3s;
   opacity: 0.5;
   filter: grayscale(100);

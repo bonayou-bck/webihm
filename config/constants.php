@@ -1,6 +1,6 @@
 <?php
 
-define('BLOG_ITEM_LIMIT', 3);
+define('BLOG_ITEM_LIMIT', 30);
 
 // 'editing','review','approved','rejected','published', 'draft
 define('BLOG_STATUS_EDITING', 'editing');

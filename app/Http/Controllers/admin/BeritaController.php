@@ -34,15 +34,13 @@ class BeritaController extends Controller
         $data = $request->validate([
             'title_id'   => 'required|string|max:255',
             'title_en'   => 'nullable|string|max:255',
+            'slug_id'       => 'nullable|string|max:255',
+            'slug_en'       => 'nullable|string|max:255',
             'content_id' => 'required|string',
             'content_en' => 'nullable|string',
             'status'     => 'nullable|string|max:50', // contoh: published/draft
             'cover'      => 'nullable|image|max:2048', // jpg/png/webp, dll
         ]);
-
-        // Slug otomatis dari judul
-        $data['slug_id'] = Str::slug($data['title_id']);
-        $data['slug_en'] = !empty($data['title_en']) ? Str::slug($data['title_en']) : null;
 
         // Simpan cover ke public/upload/berita (path yang disimpan di DB: upload/berita/xxx.jpg)
         if ($request->hasFile('cover')) {
@@ -86,10 +84,40 @@ class BeritaController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
-    {
-        //
+    public function update(Request $request, $id)
+{
+    $blog = Blog::findOrFail($id);
+
+    $blog->title_id   = $request->title_id;   // bebas kosong
+    $blog->title_en   = $request->title_en;
+    $blog->content_id = $request->content_id;
+    $blog->content_en = $request->content_en;
+    $blog->status     = $request->status;
+
+    // JANGAN timpa slug kalau input kosong
+    if ($request->filled('slug_id')) {
+        $blog->slug_id = $request->slug_id;
     }
+    if ($request->filled('slug_en')) {
+        $blog->slug_en = $request->slug_en;
+    }
+
+    if ($request->hasFile('cover')) {
+        if ($blog->cover && file_exists(public_path($blog->cover))) {
+            @unlink(public_path($blog->cover));
+        }
+        $dir = public_path('upload/berita');
+        if (!is_dir($dir)) @mkdir($dir, 0775, true);
+        $fileName = time().'-'.$request->file('cover')->getClientOriginalName();
+        $request->file('cover')->move($dir, $fileName);
+        $blog->cover = 'upload/berita/'.$fileName;
+    }
+
+    $blog->save();
+    return back()->with('success','Berita berhasil diperbarui');
+}
+
+
 
     /**
      * Remove the specified resource from storage.

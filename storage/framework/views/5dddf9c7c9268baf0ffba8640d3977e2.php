@@ -33,10 +33,26 @@
   </li>
 
   
-  <li class="nav-item <?php echo e(request()->routeIs('pages.keberlanjutan') ? 'active' : ''); ?>">
-    <a href="<?php echo e(route('pages.keberlanjutan')); ?>">
+  <li class="nav-item <?php echo e(request()->routeIs('admin.sertifikat') ? 'active' : ''); ?>">
+    <a href="<?php echo e(route('admin.sertifikat')); ?>">
+      <i class="far fa-newspaper"></i>
+      <p>Sertifikat</p>
+    </a>
+  </li>
+
+  
+  <li class="nav-item <?php echo e(request()->routeIs('admin.keberlanjutan') ? 'active' : ''); ?>">
+    <a href="<?php echo e(route('admin.keberlanjutan')); ?>">
       <i class="fas fa-leaf"></i>
       <p>Keberlanjutan</p>
+    </a>
+  </li>
+  
+  
+  <li class="nav-item <?php echo e(request()->routeIs('admin.fasilitas') ? 'active' : ''); ?>">
+    <a href="<?php echo e(route('admin.fasilitas')); ?>">
+      <i class="fas fa-leaf"></i>
+      <p>Fasilitas</p>
     </a>
   </li>
 </ul>

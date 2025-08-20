@@ -25,12 +25,16 @@ use Illuminate\Support\Facades\Auth;
 */
 
 // ===== TEMPLATE (exactly as provided) =====
-Route::view('/', 'dashboard')->name('landing');
-Route::view('/keberlanjutan', 'pages.keberlanjutan')->name('pages.keberlanjutan');
-Route::view('/sertifikat', 'pages.sertifikat')->name('pages.sertifikat');
+// Route::view('/', 'dashboard')->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 Route::view('/tentang', 'pages.tentang')->name('pages.tentang');
 Route::view('/berita', 'pages.berita')->name('pages.berita');
-Route::view('/berita-details', 'pages.berita-detail')->name('pages.berita-detail');
+Route::view('/keberlanjutan', 'pages.keberlanjutan')->name('pages.keberlanjutan');
+Route::view('/fasilitas', 'pages.fasilitas')->name('pages.fasilitas');
+Route::get('/sertifikat', [DashboardController::class, 'sertifikat'])->name('pages.sertifikat');
+Route::get('/keberlanjutan', [DashboardController::class, 'keberlanjutan'])->name('pages.keberlanjutan');
+Route::get('/berita-detail/{id}', [DashboardController::class, 'beritadetail'])->name('pages.berita-detail');
+Route::get('/fasilitas', [DashboardController::class, 'fasilitas'])->name('pages.fasilitas');
 
 Route::controller(DashboardController::class)->group(function () {
     Route::get('/dashboard', 'index')->name('dashboard'); 
@@ -38,23 +42,45 @@ Route::controller(DashboardController::class)->group(function () {
 });
 
 Route::prefix('admin')->name('admin.')->group(function () {
-    Route::view('/dashboard', 'admin.dashboard')->name('dashboard');
-    Route::get('/berita', [BeritaController::class, 'index'])->name('berita');
-    Route::get('/berita/{id}', [BeritaController::class, 'show'])->name('berita{id}');
-    Route::put('/berita/{id}', [BeritaController::class, 'update'])->name('berita{id}');
-    Route::post('/berita-create', [BeritaController::class, 'store'])->name('berita-create');
-    Route::delete('/berita/{id}', [BeritaController::class, 'destroy'])->name('berita-delete');
+  Route::view('/dashboard', 'admin.dashboard')->name('dashboard');
+
+  //berita resource routes
+  Route::get('/berita', [BeritaController::class, 'index'])->name('berita');
+  Route::get('/berita/{id}', [BeritaController::class, 'show'])->name('berita{id}');
+  Route::put('/berita/{id}', [BeritaController::class, 'update'])->name('berita{id}');
+  Route::post('/berita-create', [BeritaController::class, 'store'])->name('berita-create');
+  Route::delete('/berita/{id}', [BeritaController::class, 'destroy'])->name('berita-delete');
+
+  // Sertifikat resource routes
+  Route::get('/sertifikat', [\App\Http\Controllers\admin\SertifikatController::class, 'index'])->name('sertifikat');
+  Route::get('/sertifikat/{id}', [\App\Http\Controllers\admin\SertifikatController::class, 'show'])->name('sertifikat{id}');
+  Route::put('/sertifikat/{id}', [\App\Http\Controllers\admin\SertifikatController::class, 'update'])->name('sertifikat{id}');
+  Route::post('/sertifikat-create', [\App\Http\Controllers\admin\SertifikatController::class, 'store'])->name('sertifikat-create');
+  Route::delete('/sertifikat/{id}', [\App\Http\Controllers\admin\SertifikatController::class, 'destroy'])->name('sertifikat-delete');
+  
+  // Keberlanjutan resource routes
+  Route::get('/keberlanjutan', [\App\Http\Controllers\admin\KeberlanjutanController::class, 'index'])->name('keberlanjutan');
+  Route::get('/keberlanjutan/{id}', [\App\Http\Controllers\admin\KeberlanjutanController::class, 'show'])->name('keberlanjutan{id}');
+  Route::put('/keberlanjutan/{id}', [\App\Http\Controllers\admin\KeberlanjutanController::class, 'update'])->name('keberlanjutan{id}');
+  Route::post('/keberlanjutan-create', [\App\Http\Controllers\admin\KeberlanjutanController::class, 'store'])->name('keberlanjutan-create');
+  Route::delete('/keberlanjutan/{id}', [\App\Http\Controllers\admin\KeberlanjutanController::class, 'destroy'])->name('keberlanjutan-delete');
+
+  Route::get('/fasilitas', [\App\Http\Controllers\admin\FasilitasController::class, 'index'])->name('fasilitas');
+  Route::get('/fasilitas/{id}', [\App\Http\Controllers\admin\FasilitasController::class, 'show'])->name('fasilitas{id}');
+  Route::put('/fasilitas/{id}', [\App\Http\Controllers\admin\FasilitasController::class, 'update'])->name('fasilitas{id}');
+  Route::post('/fasilitas-create', [\App\Http\Controllers\admin\FasilitasController::class, 'store'])->name('fasilitas-create');
+  Route::delete('/fasilitas/{id}', [\App\Http\Controllers\admin\FasilitasController::class, 'destroy'])->name('fasilitas-delete');
 });
 
 // ===== OPTIONAL: Backend endpoints for create/edit/draft/reject (can coexist) =====
-Route::prefix('blog')->group(function () {
-    Route::post('/create', [BlogController::class, 'postCreate'])->name('admin.blog.create');
-    Route::get('/edit/{slugOrId}', [BlogController::class, 'edit'])->name('admin.blog.edit')->where('slugOrId','^[A-Za-z0-9-_]+$');
-    Route::post('/update/{id}', [BlogController::class, 'postUpdate'])->name('admin.blog.update')->whereNumber('id');
-    Route::get('/to-draft/{id}', [BlogController::class, 'toDraft'])->name('admin.blog.toDraft')->whereNumber('id');
-    Route::post('/reject/{id}', [BlogController::class, 'postReject'])->name('admin.blog.reject')->whereNumber('id');
-    Route::get('/history/{id?}', [BlogController::class, 'history'])->name('admin.blog.history')->whereNumber('id');
-});
+// Route::prefix('blog')->group(function () {
+//     Route::post('/create', [BlogController::class, 'postCreate'])->name('admin.blog.create');
+//     Route::get('/edit/{slugOrId}', [BlogController::class, 'edit'])->name('admin.blog.edit')->where('slugOrId','^[A-Za-z0-9-_]+$');
+//     Route::post('/update/{id}', [BlogController::class, 'postUpdate'])->name('admin.blog.update')->whereNumber('id');
+//     Route::get('/to-draft/{id}', [BlogController::class, 'toDraft'])->name('admin.blog.toDraft')->whereNumber('id');
+//     Route::post('/reject/{id}', [BlogController::class, 'postReject'])->name('admin.blog.reject')->whereNumber('id');
+//     Route::get('/history/{id?}', [BlogController::class, 'history'])->name('admin.blog.history')->whereNumber('id');
+// });
 
 // //Language Translation
 // Route::get('index/{locale}', [App\Http\Controllers\HomeController::class, 'lang']);
