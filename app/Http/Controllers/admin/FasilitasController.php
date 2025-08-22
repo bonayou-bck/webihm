@@ -51,8 +51,9 @@ class FasilitasController extends Controller
                 $desc = $request->descriptions[$i] ?? null;
 
                 $fasilitas->Fasilitas_img()->create([
-                    'path' => $path,
+                    'src' => $path,
                     'description' => $desc,
+                    'fasilitas_id' => $fasilitas->id,
                 ]);
             }
         }
@@ -63,7 +64,7 @@ class FasilitasController extends Controller
     public function show($id)
     {
         $row = Fasilitas::with('Fasilitas_img')->findOrFail($id);
-        dd($row);
+        // dd($row);
         return response()->json($row);
     }
 
@@ -155,7 +156,7 @@ class FasilitasController extends Controller
 
             $this->deletePublicFileIfExists($keb->cover);
 
-            $imgs = Fasilitas_img::where('fasilitas_id', $keb->id)->get();
+            $imgs = Fasilitas_img::where('id_fasilitas', $keb->id)->get();
             foreach ($imgs as $img) {
                 $this->deletePublicFileIfExists($img->src);
                 $img->delete();

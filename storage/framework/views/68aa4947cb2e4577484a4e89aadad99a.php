@@ -44,7 +44,9 @@
                                     <?php endif; ?>
                                 </td>
                                 <td class="text-center">
-                                    <?php echo e($row->Fasilitas_img_count ?? ($row->Fasilitas_img_count ?? 0)); ?></td>
+                                    <?php echo e($row->Fasilitas_img ? count($row->Fasilitas_img) : 0); ?>
+
+                                </td>
                                 <td class="small text-muted"><?php echo e(optional($row->updated_at)->format('d M Y H:i')); ?></td>
                                 <td>
                                     <div class="form-button-action">
@@ -111,8 +113,7 @@
                                 <label class="form-label mb-0">Gambar Galeri (maks 5)</label>
                                 <small class="text-muted">jpg/png/webp ≤2MB</small>
                             </div>
-                            <input type="file" name="images[]" id="createImages" class="form-control" accept="image/*"
-                                multiple>
+                            <input type="file" name="images[]" id="createImages" class="form-control" accept="image/*" multiple>
                             <div id="createPreview" class="row g-2 mt-2"></div>
                         </div>
                     </div>
@@ -161,8 +162,7 @@
                                 <label class="form-label mb-0">Tambah Gambar Galeri (opsional)</label>
                                 <small class="text-muted">jpg/png/webp ≤2MB</small>
                             </div>
-                            <input type="file" name="images[]" id="editImages" class="form-control" accept="image/*"
-                                multiple>
+                            <input type="file" name="images[]" id="editImages" class="form-control" accept="image/*" multiple>
                             <div id="editPreview" class="row g-2 mt-2"></div>
                         </div>
 
@@ -209,8 +209,8 @@
         <script>
             document.addEventListener('DOMContentLoaded', function() {
                 // DataTables init (aman dari re-init)
-                if (!$.fn.DataTable.isDataTable('#tblfasilitas')) {
-                    $('#tblfasilitas').DataTable({
+                if (!$.fn.DataTable.isDataTable('#tblFasilitas')) {
+                    $('#tblFasilitas').DataTable({
                         pageLength: 5,
                         autoWidth: false,
                         order: [],
@@ -282,13 +282,14 @@
                         const data = await res.json();
 
                         // set action form
-                        const form = document.getElementById('editForm') || document.querySelector('#modalEdit form');
-if (!form) {
-    console.warn('Edit form not found');
-    alert('Form edit tidak ditemukan. Silakan muat ulang halaman.');
-    return;
-}
-form.action = `<?php echo e(url('admin/fasilitas')); ?>/${id}`;
+                        const form = document.getElementById('editForm') || document.querySelector(
+                            '#modalEdit form');
+                        if (!form) {
+                            console.warn('Edit form not found');
+                            alert('Form edit tidak ditemukan. Silakan muat ulang halaman.');
+                            return;
+                        }
+                        form.action = `<?php echo e(url('admin/fasilitas')); ?>/${id}`;
 
                         // isi field
                         document.getElementById('editTitle').value = data.title ?? '';
@@ -308,9 +309,10 @@ form.action = `<?php echo e(url('admin/fasilitas')); ?>/${id}`;
                             coverBox.appendChild(img);
                         }
 
-                        // existing images
+                        // existing images (preview galeri dari DB)
                         const wrap = document.getElementById('existingWrap');
                         wrap.innerHTML = '';
+                        window.fasilitasDelSet = new Set();
                         (data.Fasilitas_img || []).forEach(img => {
                             const col = document.createElement('div');
                             col.className = 'col-4 col-md-3';
@@ -322,6 +324,11 @@ form.action = `<?php echo e(url('admin/fasilitas')); ?>/${id}`;
                             del.className = 'btn btn-sm btn-danger del';
                             del.dataset.id = img.id;
                             del.innerHTML = '&times;';
+                            del.onclick = function() {
+                                window.fasilitasDelSet.add(img.id);
+                                col.remove();
+                                document.getElementById('delete_ids').value = [...window.fasilitasDelSet].join(',');
+                            };
                             const image = document.createElement('img');
                             image.src = `/${img.src}`;
                             image.alt = 'img-' + img.id;
@@ -330,13 +337,16 @@ form.action = `<?php echo e(url('admin/fasilitas')); ?>/${id}`;
                             col.appendChild(card);
                             wrap.appendChild(col);
                         });
-
                         // reset delete_ids
                         document.getElementById('delete_ids').value = '';
 
                         // show modal
-                        const modal = new bootstrap.Modal(document.getElementById('modalEdit'));
-                        modal.show();
+                        const modalEditEl = document.getElementById('modalEdit');
+                        let modalEdit = bootstrap.Modal.getInstance(modalEditEl);
+                        if (!modalEdit) {
+                            modalEdit = new bootstrap.Modal(modalEditEl);
+                        }
+                        modalEdit.show();
                     } catch (err) {
                         alert(err.message || 'Terjadi kesalahan');
                     }
@@ -364,14 +374,14 @@ form.action = `<?php echo e(url('admin/fasilitas')); ?>/${id}`;
             });
 
             // Hapus gambar existing (toggle)
-            const delSet = new Set();
+            window.fasilitasDelSet = window.fasilitasDelSet || new Set();
             document.getElementById('existingWrap')?.addEventListener('click', function(e) {
                 if (e.target.classList.contains('del')) {
                     const id = e.target.dataset.id;
-                    delSet.add(id);
+                    window.fasilitasDelSet.add(id);
                     // remove element dari DOM
                     e.target.closest('.col-4, .col-md-3').remove();
-                    document.getElementById('delete_ids').value = [...delSet].join(',');
+                    document.getElementById('delete_ids').value = [...window.fasilitasDelSet].join(',');
                 }
             });
 
@@ -379,10 +389,8 @@ form.action = `<?php echo e(url('admin/fasilitas')); ?>/${id}`;
             document.querySelectorAll('.btn-delete').forEach(function(btn) {
                 btn.addEventListener('click', function() {
                     const id = this.getAttribute('data-id');
-                    if (!id) return;
-                    if (!confirm('Yakin hapus data ini beserta gambarnya?')) return;
                     const form = document.getElementById('deleteForm');
-                    form.action = `<?php echo e(url('admin/fasilitas')); ?>/${id}`; // /admin/fasilitas/{id}
+                    form.action = `<?php echo e(url('admin/fasilitas')); ?>/${id}`;
                     form.submit();
                 });
             });

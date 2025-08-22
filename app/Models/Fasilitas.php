@@ -27,11 +27,11 @@ class Fasilitas extends Model
 
     public function history(): HasMany
     {
-        return $this->hasMany(BlogHistory::class, 'fasilitas_id', 'id');
+        return $this->hasMany(BlogHistory::class, 'id_fasilitas', 'id');
     }
     public function Fasilitas_img(): HasMany
     {
-        return $this->hasMany(Fasilitas_img::class, 'fasilitas_id', 'id');
+        return $this->hasMany(Fasilitas_img::class, 'id_fasilitas', 'id');
     }
 
 }
