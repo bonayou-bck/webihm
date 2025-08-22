@@ -17,11 +17,15 @@ class DashboardController extends Controller
 
     public function index(Request $request)
     {
-        $past = Blog::get();
+        $past = Blog::query()
+            ->limit(5)
+            ->orderbyDesc('updated_at')
+            ->get();
         $features = Fasilitas::query()
             ->limit(3)
             ->orderByDesc('updated_at')
             ->get();
+            // dd($features);
         // Ambil item + gambar (hanya kolom yang perlu)
         $kebs = Keberlanjutan::query()
             ->select('id','title','slug')
@@ -95,13 +99,13 @@ class DashboardController extends Controller
         $kebs = \App\Models\Keberlanjutan::with('Keberlanjutan_img')
             ->orderByDesc('updated_at')
             ->get(); // <-- JANGAN di-map/->toArray()
-
+        // dd($kebs);
         return view('pages.keberlanjutan', compact('kebs'));
     }
 
     public function fasilitas()
     {
-        $features = Fasilitas::get();
+        $features = Fasilitas::with('fasilitas_img')->get();
         // dd($features);
         return view('pages.fasilitas', compact('features'));
     }

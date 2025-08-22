@@ -15,6 +15,7 @@ class Fasilitas_img extends Model
         'Fasilitas_img',
         'src',
         'description',
+        'caption',
     ];      
 
     public function fasilitas()

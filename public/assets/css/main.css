@@ -816,7 +816,8 @@ h6 {
 /* Megamenu 2 - Mobile */
 @media (max-width: 1199px) {
   .navmenu .megamenu-2 {
-    /* Hide Desktop Megamenu in Mobile */
+  /* Mobile: ensure megamenu container remains block-level (desktop/child rules handle visibility) */
+  display: block;
   }
 
   .navmenu .megamenu-2 .desktop-megamenu {
@@ -1240,7 +1241,8 @@ section,
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
+  /* cover viewport height to align with hero min-height behavior */
+  height: 100vh;
   background: linear-gradient(135deg, color-mix(in srgb, var(--background-color), transparent 25%) 0%, color-mix(in srgb, var(--background-color), transparent 10%) 500%);
 }
 
@@ -3775,7 +3777,8 @@ section,
   display: flex;
   align-items: flex-end;
   justify-content: center;
-  padding-bottom: 20px;
+  /* use viewport-based padding for consistent scaling */
+  padding-bottom: 2vh;
   opacity: 0;
   visibility: hidden;
   transition: 0.3s;
@@ -5489,5 +5492,155 @@ section,
 # Starter Section Section
 --------------------------------------------------------------*/
 .starter-section {
-  /* Add your styles here */
+  /* Starter section placeholder - kept minimal to satisfy linter */
+  padding: 10px 0;
 }
+
+/* Page: Dashboard / Beranda specific overrides moved here from inline styles */
+/* Featured Services: no padding */
+#featured-services.section,
+.featured-services.section {
+  padding: 0 !important;
+}
+
+/* Section setelah featured-services: abu-abu */
+.section-gray {
+  background: #f2f4f7;
+}
+
+/* Hero and badge */
+.hero-content h1 {
+  font-weight: 700;
+  line-height: 1.05;
+  margin: 0;
+}
+
+.hero-badge {
+  display: inline-block;
+  padding: .12rem .6rem;
+  border-radius: 6px;
+  background: linear-gradient(90deg, #16a34a, #0ea5a4);
+  color: #fff;
+  margin: 0 .4rem;
+  font-size: 1.05em;
+}
+
+/* Team card image sizing moved from inline style to CSS for responsiveness */
+.team-image .team-cover {
+  width: 291px;
+  height: 260px;
+  object-fit: cover;
+  display: block;
+  border-radius: 8px;
+}
+
+@media (max-width: 992px) {
+  .team-image .team-cover {
+    width: 100%;
+    height: auto;
+    max-height: 280px;
+  }
+}
+
+/* Features image box: responsive */
+.image-box img {
+  width: 100%;
+  height: auto;
+  max-height: 420px;
+  object-fit: cover;
+  display: block;
+  border-radius: 8px;
+}
+
+/* Small accessibility improvement */
+.client-logo img[alt=""] {
+  opacity: .9;
+}
+
+/* Features section background & spacing to avoid 'collision' with previous section */
+#features.features.section {
+  background: linear-gradient(180deg, #f7fbf7 0%, #ffffff 100%);
+  padding-top: 2.25rem;
+  padding-bottom: 2.25rem;
+}
+
+#features .container {
+  position: relative;
+}
+
+/* Left nav visual separators and clearer active state */
+#features .nav.nav-tabs.flex-column {
+  background: rgba(255, 255, 255, 0.98);
+  padding: .6rem;
+  border-radius: 10px;
+  border: 1px solid rgba(6, 95, 70, 0.04);
+}
+
+#features .nav-link {
+  border: none;
+  border-left: 4px solid transparent;
+  padding: .8rem 1rem;
+  margin-bottom: .4rem;
+  color: #0f172a;
+  background: transparent;
+  border-radius: 8px;
+  transition: all .18s ease;
+}
+
+#features .nav-link:hover {
+  background: rgba(6, 95, 70, 0.03);
+}
+
+#features .nav-link.active {
+  border-left-color: var(--accent-2, #16a34a);
+  background: linear-gradient(90deg, rgba(22, 163, 74, 0.06), rgba(14, 165, 164, 0.03));
+  color: var(--accent-2, #16a34a);
+  box-shadow: inset 0 0 0 1px rgba(14, 165, 164, 0.02);
+}
+
+#features .nav-item .ms-3 h4 {
+  margin-bottom: .25rem;
+  font-size: 1.02rem;
+}
+
+#features .nav-item .ms-3 p {
+  margin: 0;
+  color: rgba(15, 23, 42, 0.7);
+}
+
+/* subtle divider if needed */
+#features .nav-tabs .nav-link+.nav-link {
+  border-top: 1px solid rgba(6, 95, 70, 0.02);
+}
+
+/* Page: Tentang (About) specific styles moved from inline view */
+.cert-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* teks kiri, logo kanan */
+  gap: 20px;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  padding-bottom: 8px;
+}
+.cert-row h4 {
+  margin: 0;
+  white-space: nowrap;
+}
+.cert-logos {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  flex-shrink: 0;
+}
+.cert-logo {
+  height: 64px;
+  width: auto;
+  object-fit: contain;
+  display: block;
+}
+
+.visi-text { text-align: center; }
+.service-features h2 { margin-bottom: .5rem; }
+.service-features ul { margin: 0 0 1.25rem 1rem; }
+.service-features li { margin-bottom: .4rem; line-height: 1.5; }

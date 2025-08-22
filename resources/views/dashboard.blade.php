@@ -5,18 +5,6 @@
 
 
     @push('styles')
-        <style>
-            /* Featured Services: no padding */
-            #featured-services.section,
-            .featured-services.section {
-                padding: 0 !important;
-            }
-
-            /* Section setelah featured-services: abu-abu */
-            .section-gray {
-                background: #f2f4f7;
-            }
-        </style>
     @endpush
 
     @section('content')
@@ -34,9 +22,7 @@
                     <div class="row align-items-center">
                         <div class="col-lg-6">
                             <div class="hero-content">
-                                <h1>MEMASTIKAN</h1>
-                                <h1 class="hero-badge">KEBERLANJUTAN</h1>
-                                <h1>UNTUK MASA DEPAN</h1>
+                                <h1>MEMASTIKAN <span class="hero-badge">KEBERLANJUTAN</span> UNTUK MASA DEPAN</h1>
                             </div>
                         </div>
                     </div>
@@ -221,8 +207,8 @@
                                     memberikan dampak jangka panjang pada industri dan dunia. Bergabunglah bersama kami
                                     saat kami membuka jalan menuju masa depan yang lebih hijau dan inklusif.</p>
                                 <!-- <div class="mt-4" data-aos-duration="1100">
-                                                                                <a href="#" class="btn-consultation"><span>Request a Consultation</span><i class="bi bi-arrow-right"></i></a>
-                                                                              </div> -->
+                                                                                        <a href="#" class="btn-consultation"><span>Request a Consultation</span><i class="bi bi-arrow-right"></i></a>
+                                                                                      </div> -->
                             </div>
                         </div>
                         <div class="col-lg-6">
@@ -352,8 +338,8 @@
                                         class="text-decoration-none">
                                         <div class="team-card">
                                             <div class="team-image">
-                                                <img src="{{ asset($i->cover) }}" class="img-fluid" alt=""
-                                                    loading="lazy" style="width:291px; height:260px; object-fit:cover;">
+                                                <img src="{{ asset($i->cover) }}" class="team-cover img-fluid"
+                                                    alt="{{ $i->title_id ?? '' }}" loading="lazy">
                                                 <div class="team-overlay"></div>
                                             </div>
                                             <div class="team-content">
@@ -441,19 +427,18 @@
                                                 <div class="col-lg-6">
                                                     <h3>{{ $f->title ?? 'Judul' }}</h3>
                                                     <p class="highlight">
-                                                        {{ \Illuminate\Support\Str::limit(strip_tags($f->description ?? ''), 140) }}
+                                                        {{ \Illuminate\Support\Str::limit(strip_tags($f->content ?? ''), 140) }}
                                                     </p>
                                                 </div>
                                                 <div class="col-lg-6">
                                                     <div class="image-box">
-                                                        <a href="{{ $f->foto ? asset($f->foto) : asset($fallbacks[$i] ?? 'assets/img/misc/misc-square-6.webp') }}"
+                                                        <a href="{{ $f->cover ? asset($f->cover) : asset($fallbacks[$i] ?? 'assets/img/misc/misc-square-6.webp') }}"
                                                             class="glightbox" data-gallery="fasilitas">
-                                                            <img src="{{ $f->foto ? asset($f->foto) : asset($fallbacks[$i] ?? 'assets/img/misc/misc-square-6.webp') }}"
-                                                                alt="" class="img-fluid" loading="lazy"
-                                                                decoding="async">
+                                                            <img src="{{ $f->cover ? asset($f->cover) : asset($fallbacks[$i] ?? 'assets/img/misc/misc-square-6.webp') }}"
+                                                                alt="{{ $f->title ?? '' }}" class="img-fluid"
+                                                                loading="lazy" decoding="async">
                                                         </a>
                                                     </div>
-
                                                 </div>
                                             </div>
                                         </div>

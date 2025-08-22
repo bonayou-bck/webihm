@@ -30,8 +30,8 @@ class FasilitasController extends Controller
             'cover' => 'nullable|image|max:2048|mimes:jpg,jpeg,png,webp',
             'images' => 'nullable|array|max:5', // maksimal 5 images
             'images.*' => 'image|max:2048|mimes:jpg,jpeg,png,webp',
-            'descriptions' => 'nullable|array',
-            'descriptions.*' => 'nullable|string|max:500',
+            'captions' => 'nullable|array',
+            'captions.*' => 'nullable|string|max:500',
         ]);
 
         // Simpan cover
@@ -43,16 +43,14 @@ class FasilitasController extends Controller
         // Simpan data utama
         $fasilitas = \App\Models\Fasilitas::create($data);
 
-        // Simpan images beserta description
-        // Simpan images beserta description
+        // Simpan images beserta caption
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $i => $image) {
                 $path = $this->moveToPublicUpload($image, 'Fasilitas/detail');
-                $desc = $request->descriptions[$i] ?? null;
-
+                $caption = $request->captions[$i] ?? null;
                 $fasilitas->Fasilitas_img()->create([
                     'src' => $path,
-                    'description' => $desc,
+                    'caption' => $caption,
                     'fasilitas_id' => $fasilitas->id,
                 ]);
             }
@@ -117,6 +115,18 @@ class FasilitasController extends Controller
                 }
             }
 
+            // update captions for existing images if provided
+            $captionsExisting = $request->input('captions_existing', []);
+            if (is_array($captionsExisting) && count($captionsExisting) > 0) {
+                foreach ($captionsExisting as $imgId => $cap) {
+                    $img = Fasilitas_img::where('id_fasilitas', $fasilitas->id)->where('id', $imgId)->first();
+                    if ($img) {
+                        $img->caption = $cap;
+                        $img->save();
+                    }
+                }
+            }
+
             $files = $this->collectFiles($request, 'images');
             Log::info('Fasilitas update files count', ['count' => count($files)]);
 
@@ -125,7 +135,9 @@ class FasilitasController extends Controller
                 if ($existing + count($files) > 5) {
                     return redirect()->back()->withInput()->with('error', 'Maksimal total 5 gambar (existing + baru).');
                 }
-                foreach ($files as $file) {
+                // accept captions[] for newly uploaded images
+                $newCaptions = $request->input('captions', []);
+                foreach ($files as $idx => $file) {
                     if (!$file instanceof UploadedFile || !$file->isValid()) {
                         Log::warning('Invalid uploaded file skipped');
                         continue;
@@ -134,6 +146,7 @@ class FasilitasController extends Controller
                     Fasilitas_img::create([
                         'id_fasilitas' => $fasilitas->id,
                         'src' => $publicRelative,
+                        'caption' => $newCaptions[$idx] ?? null,
                     ]);
                 }
             }

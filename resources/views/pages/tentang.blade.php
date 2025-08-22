@@ -20,46 +20,6 @@
   </div><!-- End Page Title -->
 
   <!-- Service Details Section -->
-  @push('styles')
-<style>
-  /* Baris sertifikat */
-  .cert-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between; /* teks kiri, logo kanan */
-    gap: 20px;
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    padding-bottom: 8px;
-  }
-  .cert-row h4 {
-    margin: 0;
-    white-space: nowrap;
-  }
-  .cert-logos {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    flex-shrink: 0;
-  }
-  .cert-logo {
-    height: 64px;
-    width: auto;
-    object-fit: contain;
-    display: block;
-  }
-
-  /* Rata tengah untuk visi */
-  .visi-text {
-    text-align: center;
-  }
-
-  /* Spasi & tipografi */
-  .service-features h2 { margin-bottom: .5rem; }
-  .service-features ul { margin: 0 0 1.25rem 1rem; }
-  .service-features li { margin-bottom: .4rem; line-height: 1.5; }
-</style>
-@endpush
 
 <section id="service-details" class="service-details section">
   <div class="container">

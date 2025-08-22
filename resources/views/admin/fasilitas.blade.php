@@ -103,18 +103,19 @@
                             <textarea name="content" class="form-control" rows="4"></textarea>
                         </div>
 
-                        <div class="col-md-6">
+                        <div class="col-12">
                             <label class="form-label">Cover (opsional)</label>
                             <input type="file" name="cover" id="createCover" class="form-control" accept="image/*">
                             <div id="createCoverPreview" class="mt-2"></div>
                         </div>
 
-                        <div class="col-md-6">
+                        <div class="col-12">
                             <div class="d-flex justify-content-between align-items-center">
                                 <label class="form-label mb-0">Gambar Galeri (maks 5)</label>
                                 <small class="text-muted">jpg/png/webp ≤2MB</small>
                             </div>
-                            <input type="file" name="images[]" id="createImages" class="form-control" accept="image/*" multiple>
+                            <input type="file" name="images[]" id="createImages" class="form-control" accept="image/*"
+                                multiple>
                             <div id="createPreview" class="row g-2 mt-2"></div>
                         </div>
                     </div>
@@ -163,7 +164,8 @@
                                 <label class="form-label mb-0">Tambah Gambar Galeri (opsional)</label>
                                 <small class="text-muted">jpg/png/webp ≤2MB</small>
                             </div>
-                            <input type="file" name="images[]" id="editImages" class="form-control" accept="image/*" multiple>
+                            <input type="file" name="images[]" id="editImages" class="form-control" accept="image/*"
+                                multiple>
                             <div id="editPreview" class="row g-2 mt-2"></div>
                         </div>
 
@@ -246,9 +248,12 @@
                     const wrap = document.getElementById('createPreview');
                     wrap.innerHTML = '';
                     const files = [...this.files].slice(0, 5);
-                    files.forEach(file => {
+                    files.forEach((file, i) => {
+                        // wrapper column for image + caption
                         const col = document.createElement('div');
-                        col.className = 'col-4 col-md-3';
+                        col.className = 'col-6 col-md-3';
+
+                        // image card
                         const card = document.createElement('div');
                         card.className = 'thumb';
                         const img = document.createElement('img');
@@ -258,12 +263,26 @@
                         fr.readAsDataURL(file);
                         card.appendChild(img);
                         col.appendChild(card);
+
+                        // caption input grouped under the image + visible caption text
+                        const capText = document.createElement('div');
+                        capText.className = 'small text-muted mt-2';
+                        capText.textContent = '';
+                        col.appendChild(capText);
+
+                        const capInput = document.createElement('input');
+                        capInput.type = 'text';
+                        capInput.name = 'captions[]';
+                        capInput.className = 'form-control mt-1';
+                        capInput.placeholder = 'Caption gambar ' + (i + 1);
+                        // live update caption text when user types
+                        capInput.addEventListener('input', function() {
+                            capText.textContent = this.value;
+                        });
+                        col.appendChild(capInput);
+
                         wrap.appendChild(col);
                     });
-                    if (this.files.length > 5) {
-                        alert('Maksimal 5 gambar.');
-                        this.value = '';
-                    }
                 });
 
                 // OPEN EDIT
@@ -316,10 +335,12 @@
                         window.fasilitasDelSet = new Set();
                         (data.Fasilitas_img || []).forEach(img => {
                             const col = document.createElement('div');
-                            col.className = 'col-4 col-md-3';
+                            col.className = 'col-6 col-md-3';
                             col.dataset.id = img.id;
+
                             const card = document.createElement('div');
                             card.className = 'thumb';
+
                             const del = document.createElement('button');
                             del.type = 'button';
                             del.className = 'btn btn-sm btn-danger del';
@@ -328,14 +349,35 @@
                             del.onclick = function() {
                                 window.fasilitasDelSet.add(img.id);
                                 col.remove();
-                                document.getElementById('delete_ids').value = [...window.fasilitasDelSet].join(',');
+                                document.getElementById('delete_ids').value = [...window
+                                    .fasilitasDelSet
+                                ].join(',');
                             };
+
                             const image = document.createElement('img');
                             image.src = `/${img.src}`;
                             image.alt = 'img-' + img.id;
                             card.appendChild(del);
                             card.appendChild(image);
                             col.appendChild(card);
+
+                            // visible caption text + caption input grouped under the image
+                            const capText = document.createElement('div');
+                            capText.className = 'small text-muted mt-2';
+                            capText.textContent = img.caption || '';
+                            col.appendChild(capText);
+
+                            const capInput = document.createElement('input');
+                            capInput.type = 'text';
+                            capInput.name = `captions_existing[${img.id}]`;
+                            capInput.className = 'form-control mt-1';
+                            capInput.value = img.caption || '';
+                            capInput.placeholder = 'Edit caption';
+                            capInput.addEventListener('input', function() {
+                                capText.textContent = this.value;
+                            });
+                            col.appendChild(capInput);
+
                             wrap.appendChild(col);
                         });
                         // reset delete_ids
@@ -354,13 +396,15 @@
                 });
             });
 
-            // EDIT preview images (baru)
+            // EDIT preview images (baru) - group preview + caption for newly added images
             document.getElementById('editImages')?.addEventListener('change', function() {
                 const wrap = document.getElementById('editPreview');
                 wrap.innerHTML = '';
-                [...this.files].forEach(file => {
+                const files = [...this.files].slice(0, 5);
+                files.forEach((file, i) => {
                     const col = document.createElement('div');
-                    col.className = 'col-4 col-md-3';
+                    col.className = 'col-6 col-md-3';
+
                     const card = document.createElement('div');
                     card.className = 'thumb';
                     const img = document.createElement('img');
@@ -370,6 +414,14 @@
                     fr.readAsDataURL(file);
                     card.appendChild(img);
                     col.appendChild(card);
+
+                    const capInput = document.createElement('input');
+                    capInput.type = 'text';
+                    capInput.name = 'captions[]';
+                    capInput.className = 'form-control mt-2';
+                    capInput.placeholder = 'Caption gambar ' + (i + 1);
+                    col.appendChild(capInput);
+
                     wrap.appendChild(col);
                 });
             });
@@ -380,8 +432,9 @@
                 if (e.target.classList.contains('del')) {
                     const id = e.target.dataset.id;
                     window.fasilitasDelSet.add(id);
-                    // remove element dari DOM
-                    e.target.closest('.col-4, .col-md-3').remove();
+                    // remove wrapper element for this image (find closest element with data-id)
+                    const wrapper = e.target.closest('[data-id]') || e.target.closest('.col-6, .col-md-3, .col-4');
+                    if (wrapper) wrapper.remove();
                     document.getElementById('delete_ids').value = [...window.fasilitasDelSet].join(',');
                 }
             });
