@@ -19,6 +19,6 @@
 
 <!-- Demo (opsional) -->
 <script src="{{ asset('assets/js/setting-demo.js') }}"></script>
-<script src="{{ asset('assets/js/demo.js') }}"></script>
+
 
 @stack('scripts')

@@ -18,12 +18,16 @@ class DashboardController extends Controller
     public function index(Request $request)
     {
         $past = Blog::get();
-        $features = Fasilitas::get();
+        $features = Fasilitas::query()
+            ->limit(3)
+            ->orderByDesc('updated_at')
+            ->get();
         // Ambil item + gambar (hanya kolom yang perlu)
         $kebs = Keberlanjutan::query()
             ->select('id','title','slug')
             ->with(['Keberlanjutan_img:id,keberlanjutan_id,src'])
             ->orderByDesc('updated_at')
+            ->limit(5)  
             ->get();
 
         // Buat daftar filter berdasarkan TITLE

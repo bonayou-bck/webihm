@@ -4,128 +4,226 @@ namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Fasilitas;
+use App\Models\Fasilitas_img;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class FasilitasController extends Controller
 {
-    /**
-     * Tampilkan daftar fasilitas.
-     */
     public function index()
     {
-        $fasilitas = Fasilitas::query()
-            ->orderByDesc('updated_at')
-            ->get();
-
-        return view('admin.fasilitas', compact('fasilitas'));
+        $rows = Fasilitas::get();
+        // dd($rows);
+        return view('admin.Fasilitas', compact('rows'));
     }
 
-    /**
-     * Simpan fasilitas baru.
-     */
     public function store(Request $request)
     {
         $data = $request->validate([
-            'title'       => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'foto'        => 'nullable|image|mimes:jpg,jpeg,png,webp|max:4096',
+            'title' => 'required|string|max:255',
+            'slug' => 'nullable|string|max:255',
+            'content' => 'nullable|string',
+            'cover' => 'nullable|image|max:2048|mimes:jpg,jpeg,png,webp',
+            'images' => 'nullable|array|max:5', // maksimal 5 images
+            'images.*' => 'image|max:2048|mimes:jpg,jpeg,png,webp',
+            'descriptions' => 'nullable|array',
+            'descriptions.*' => 'nullable|string|max:500',
         ]);
 
-        // Upload foto (opsional) ke public/upload/fasilitas
-        $fotoPath = null;
-        if ($request->hasFile('foto')) {
-            $fotoPath = $this->moveToPublicUpload($request->file('foto'), 'fasilitas');
+        // Simpan cover
+        if ($request->hasFile('cover')) {
+            $coverPath = $this->moveToPublicUpload($request->file('cover'), 'Fasilitas/cover');
+            $data['cover'] = $coverPath; // hasilnya "upload/Fasilitas/cover/xxxxx.jpg"
         }
 
-        Fasilitas::create([
-            'title'       => $data['title'],
-            'description' => $data['description'] ?? null,
-            'foto'        => $fotoPath, // simpan path relatif: upload/fasilitas/xxx.jpg
-        ]);
+        // Simpan data utama
+        $fasilitas = \App\Models\Fasilitas::create($data);
 
-        return back()->with('success', 'Fasilitas berhasil ditambahkan.');
+        // Simpan images beserta description
+        // Simpan images beserta description
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $i => $image) {
+                $path = $this->moveToPublicUpload($image, 'Fasilitas/detail');
+                $desc = $request->descriptions[$i] ?? null;
+
+                $fasilitas->Fasilitas_img()->create([
+                    'path' => $path,
+                    'description' => $desc,
+                ]);
+            }
+        }
+
+        return redirect()->back()->with('success', 'Data berhasil disimpan!');
     }
 
-    /**
-     * Detail fasilitas (JSON untuk modal edit via AJAX).
-     */
-    public function show(string $id)
+    public function show($id)
     {
-        $row = Fasilitas::findOrFail($id);
+        $row = Fasilitas::with('Fasilitas_img')->findOrFail($id);
+        dd($row);
         return response()->json($row);
     }
 
-    /**
-     * Update fasilitas.
-     */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        $row = Fasilitas::findOrFail($id);
+        $fasilitas = Fasilitas::findOrFail($id);
 
         $data = $request->validate([
-            'title'       => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'foto'        => 'nullable|image|mimes:jpg,jpeg,png,webp|max:4096',
+            'title' => 'required|string|max:255',
+            'slug' => 'nullable|string|max:255',
+            'content' => 'nullable|string',
+            'cover' => 'nullable|image|max:2048|mimes:jpg,jpeg,png,webp',
+            'images' => 'nullable',
+            'images.*' => 'nullable|image|max:2048|mimes:jpg,jpeg,png,webp',
+            'delete_ids' => 'nullable|string',
         ]);
 
-        // Jika ada foto baru: hapus lama, simpan baru
-        if ($request->hasFile('foto')) {
-            $this->deletePublicFileIfExists($row->foto);
-            $row->foto = $this->moveToPublicUpload($request->file('foto'), 'fasilitas');
+        try {
+            DB::beginTransaction();
+
+            $slug = trim($data['slug'] ?? '');
+            if ($slug === '') {
+                $slug = $fasilitas->slug ?: Str::slug($data['title']);
+            }
+            if ($slug !== $fasilitas->slug) {
+                $slug = $this->uniqueSlug($slug, $fasilitas->id);
+            }
+
+            if ($request->hasFile('cover')) {
+                $this->deletePublicFileIfExists($fasilitas->cover);
+                $fasilitas->cover = $this->moveToPublicUpload($request->file('cover'), 'Fasilitas/cover');
+            }
+
+            $fasilitas->title = $data['title'];
+            $fasilitas->slug = $slug;
+            $fasilitas->content = $data['content'] ?? null;
+            $fasilitas->save();
+
+            if (!empty($data['delete_ids'])) {
+                $ids = collect(explode(',', $data['delete_ids']))
+                    ->filter()
+                    ->map('intval')
+                    ->all();
+                if (!empty($ids)) {
+                    $imgs = Fasilitas_img::where('id_fasilitas', $fasilitas->id)->whereIn('id', $ids)->get();
+                    foreach ($imgs as $img) {
+                        $this->deletePublicFileIfExists($img->src);
+                        $img->delete();
+                    }
+                }
+            }
+
+            $files = $this->collectFiles($request, 'images');
+            Log::info('Fasilitas update files count', ['count' => count($files)]);
+
+            if (count($files) > 0) {
+                $existing = Fasilitas_img::where('id_fasilitas', $fasilitas->id)->count();
+                if ($existing + count($files) > 5) {
+                    return redirect()->back()->withInput()->with('error', 'Maksimal total 5 gambar (existing + baru).');
+                }
+                foreach ($files as $file) {
+                    if (!$file instanceof UploadedFile || !$file->isValid()) {
+                        Log::warning('Invalid uploaded file skipped');
+                        continue;
+                    }
+                    $publicRelative = $this->moveToPublicUpload($file, 'Fasilitas/detail');
+                    Fasilitas_img::create([
+                        'id_fasilitas' => $fasilitas->id,
+                        'src' => $publicRelative,
+                    ]);
+                }
+            }
+
+            DB::commit();
+            return redirect()->back()->with('success', 'fasilitas berhasil diperbarui.');
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            Log::error('Update fasilitas failed', ['error' => $e->getMessage()]);
+            return back()->with('error', 'Gagal update: ' . $e->getMessage());
         }
-
-        $row->title       = $data['title'];
-        $row->description = $data['description'] ?? null;
-        $row->save();
-
-        return back()->with('success', 'Fasilitas berhasil diperbarui.');
     }
 
-    /**
-     * Hapus fasilitas + fotonya.
-     */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        $row = Fasilitas::findOrFail($id);
+        try {
+            DB::beginTransaction();
 
-        // Hapus file foto jika ada
-        $this->deletePublicFileIfExists($row->foto);
+            $keb = Fasilitas::findOrFail($id);
 
-        $row->delete();
+            $this->deletePublicFileIfExists($keb->cover);
 
-        return back()->with('success', 'Fasilitas berhasil dihapus.');
+            $imgs = Fasilitas_img::where('fasilitas_id', $keb->id)->get();
+            foreach ($imgs as $img) {
+                $this->deletePublicFileIfExists($img->src);
+                $img->delete();
+            }
+
+            $keb->delete();
+
+            DB::commit();
+            return redirect()->back()->with('success', 'Data fasilitas beserta gambar berhasil dihapus.');
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            Log::error('Destroy fasilitas failed', ['error' => $e->getMessage()]);
+            return back()->with('error', 'Gagal menghapus data: ' . $e->getMessage());
+        }
     }
 
-    /**
-     * Pindahkan file ke public/upload/{subdir}, kembalikan path relatif (upload/subdir/filename.ext).
-     */
-    private function moveToPublicUpload(UploadedFile $file, string $subdir): string
+    protected function uniqueSlug(string $base, ?int $ignoreId = null): string
     {
-        $subdir    = trim($subdir, '/');
+        $slug = Str::slug($base);
+        $orig = $slug;
+        $i = 1;
+        while (Fasilitas::where('slug', $slug)->when($ignoreId, fn($q) => $q->where('id', '<>', $ignoreId))->exists()) {
+            $slug = $orig . '-' . $i;
+            $i++;
+        }
+        return $slug;
+    }
+
+    protected function collectFiles(Request $request, string $key): array
+    {
+        $files = $request->file($key);
+        if (!$files) {
+            return [];
+        }
+        return is_array($files) ? array_values(array_filter($files)) : [$files];
+    }
+
+    protected function moveToPublicUpload(UploadedFile $file, string $subdir): string
+    {
+        $subdir = trim($subdir, '/');
         $targetDir = public_path('upload' . DIRECTORY_SEPARATOR . $subdir);
-
         if (!is_dir($targetDir)) {
             @mkdir($targetDir, 0775, true);
         }
 
-        $ext  = $file->getClientOriginalExtension() ?: 'jpg';
+        $ext = $file->getClientOriginalExtension() ?: 'jpg';
         $name = (string) Str::uuid() . '.' . $ext;
-
         $file->move($targetDir, $name);
 
-        return 'upload/' . $subdir . '/' . $name; // contoh: upload/fasilitas/xxxx.jpg
+        // path relatif untuk disimpan ke DB
+        return 'upload/' . $subdir . '/' . $name;
     }
 
-    /**
-     * Hapus file relatif di bawah public (mis: upload/fasilitas/xxx.jpg).
-     */
-    private function deletePublicFileIfExists(?string $publicPath): void
+    protected function deletePublicFileIfExists(?string $publicPath): void
     {
-        if (!$publicPath) return;
+        if (!$publicPath) {
+            return;
+        }
 
-        $full = public_path(ltrim($publicPath, '/'));
+        if (str_starts_with($publicPath, 'upload/')) {
+            $relative = substr($publicPath, strlen('upload/'));
+            if (Storage::disk('public')->exists($relative)) {
+                Storage::disk('public')->delete($relative);
+            }
+            return;
+        }
+
+        $full = public_path($publicPath);
         if (is_file($full)) {
             @unlink($full);
         }

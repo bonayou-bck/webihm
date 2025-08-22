@@ -51,7 +51,7 @@
   {{-- Fasilitas (pakai route landing yg sudah ada) --}}
   <li class="nav-item {{ request()->routeIs('admin.fasilitas') ? 'active' : '' }}">
     <a href="{{ route('admin.fasilitas') }}">
-      <i class="fas fa-leaf"></i>
+      <i class="fa-solid fa-house"></i>
       <p>Fasilitas</p>
     </a>
   </li>

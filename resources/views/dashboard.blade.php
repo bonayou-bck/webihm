@@ -46,7 +46,7 @@
 
             <!-- About Section -->
             <section id="about" class="about section">
-                <div class="row align-items-center">
+                <div class="row">
                     <div class="col-lg-6">
                         <div class="content">
                             <p class="lead">Tentang Kami</p>

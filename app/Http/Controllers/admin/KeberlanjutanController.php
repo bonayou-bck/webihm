@@ -20,7 +20,7 @@ class KeberlanjutanController extends Controller
             ->withCount('Keberlanjutan_img')
             ->orderByDesc('id')
             ->get();
-
+        // dd($rows);
         return view('admin.keberlanjutan', compact('rows'));
     }
 

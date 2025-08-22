@@ -19,7 +19,7 @@
 
 <!-- Demo (opsional) -->
 <script src="<?php echo e(asset('assets/js/setting-demo.js')); ?>"></script>
-<script src="<?php echo e(asset('assets/js/demo.js')); ?>"></script>
+
 
 <?php echo $__env->yieldPushContent('scripts'); ?>
 <?php /**PATH /Users/bona/Downloads/webihm1/resources/views/partials/scripts.blade.php ENDPATH**/ ?>

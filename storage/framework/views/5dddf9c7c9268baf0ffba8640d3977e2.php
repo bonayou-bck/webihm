@@ -51,7 +51,7 @@
   
   <li class="nav-item <?php echo e(request()->routeIs('admin.fasilitas') ? 'active' : ''); ?>">
     <a href="<?php echo e(route('admin.fasilitas')); ?>">
-      <i class="fas fa-leaf"></i>
+      <i class="fa-solid fa-house"></i>
       <p>Fasilitas</p>
     </a>
   </li>
