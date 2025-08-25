@@ -29,29 +29,26 @@
                 </div>
 
                 
-                <?php $__empty_1 = true; $__currentLoopData = $kebs; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $k): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                <?php $__empty_1 = true; $__currentLoopData = $features; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                     <?php
-                        $desc = trim(preg_replace('/\s+/', ' ', strip_tags($k->content ?? '')));
-                        $imgs = $k->Keberlanjutan_img ?? collect();
-                        $imgCount = $imgs->count() + (!empty($k->cover) ? 1 : 0);
+                        $images = $item->keberlanjutan_img ?? collect();
+                        $imgCount = $images->count() + (!empty($item->cover) ? 1 : 0);
                         $reverse = ($loop->index % 2) === 1; // alternate layout
                     ?>
 
                     <article class="card keb-card mb-5 shadow-sm overflow-hidden border-0">
                         <div class="row g-0 align-items-center">
                             <div class="col-lg-5 <?php if($reverse): ?> order-lg-2 <?php endif; ?>">
-                                <?php if(!empty($k->cover)): ?>
+                                <?php if(!empty($item->cover)): ?>
                                     <div class="thumb h-100 position-relative square-thumb">
-                                        <a href="<?php echo e(asset(ltrim($k->cover, '/'))); ?>" class="glightbox d-block" data-gallery="k<?php echo e($k->id); ?>" data-title="<?php echo e(e($k->title)); ?>" data-description="">
-                                            <img src="<?php echo e(asset(ltrim($k->cover, '/'))); ?>" alt="<?php echo e($k->title); ?>" class="thumb-img" loading="lazy" decoding="async">
+                                        <a href="<?php echo e(asset(ltrim($item->cover, '/'))); ?>" class="glightbox d-block" data-gallery="k<?php echo e($item->id); ?>" data-title="<?php echo e(e($item->title)); ?>" data-description="">
+                                            <img src="<?php echo e(asset(ltrim($item->cover, '/'))); ?>" alt="<?php echo e($item->title); ?>" class="thumb-img" loading="lazy" decoding="async">
                                         </a>
-
-                                        
 
                                         <div class="img-overlay p-3 d-flex justify-content-between align-items-start">
                                             <div>
-                                                <h5 class="mb-0 text-white fw-bold"><?php echo e($k->title); ?></h5>
-                                                <small class="text-white-75"><?php echo e(optional($k->updated_at)->format('d M Y')); ?></small>
+                                                <h5 class="mb-0 text-white fw-bold"><?php echo e($item->title); ?></h5>
+                                                <small class="text-white-75"><?php echo e(optional($item->updated_at)->format('d M Y')); ?></small>
                                             </div>
                                             <span class="badge bg-success bg-opacity-90"><?php echo e($imgCount); ?> gambar</span>
                                         </div>
@@ -61,24 +58,24 @@
 
                             <div class="col-lg-7">
                                 <div class="card-body p-4">
-                                    <h3 class="h4 mb-2"><?php echo e($k->title); ?></h3>
-                                    <div class="keb-content text-muted mb-3"><?php echo \Illuminate\Support\Str::limit($k->content ?? '', 320); ?></div>
+                                    <h3 class="h4 mb-2"><?php echo e($item->title); ?></h3>
+                                    <div class="keb-content text-muted mb-3"><?php echo \Illuminate\Support\Str::limit($item->content ?? '', 320); ?></div>
 
-                                    <?php if($imgs->count()): ?>
+                                    <?php if($images->count()): ?>
                                         <div class="row g-2 mb-3">
-                                            <?php $__currentLoopData = $imgs->take(4); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $img): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                            <?php $__currentLoopData = $images->take(4); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $img): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                                 <div class="col-3">
-                                                    <a href="<?php echo e(asset(ltrim($img->src, '/'))); ?>" class="glightbox keb-thumb square-thumb" data-gallery="k<?php echo e($k->id); ?>" data-title="<?php echo e(e($k->title)); ?>" data-description="<?php echo e($img->caption ?? ''); ?>">
-                                                        <img src="<?php echo e(asset(ltrim($img->src, '/'))); ?>" alt="<?php echo e($k->title); ?>" class="keb-thumb-img" loading="lazy" decoding="async">
+                                                    <a href="<?php echo e(asset(ltrim($img->src, '/'))); ?>" class="glightbox keb-thumb square-thumb" data-gallery="k<?php echo e($item->id); ?>" data-title="<?php echo e(e($item->title)); ?>" data-description="<?php echo e($img->description); ?>">
+                                                        <img src="<?php echo e(asset(ltrim($img->src, '/'))); ?>" alt="<?php echo e($item->title); ?>" class="keb-thumb-img" loading="lazy" decoding="async">
                                                     </a>
                                                 </div>
                                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
-                                            <?php if($imgs->count() > 4): ?>
+                                            <?php if($images->count() > 4): ?>
                                                 <div class="col-3 d-flex align-items-center justify-content-center">
-                                                    <a href="<?php echo e(asset(ltrim($imgs->first()->src, '/'))); ?>" class="glightbox view-more text-center d-inline-block square-thumb" data-gallery="k<?php echo e($k->id); ?>">
+                                                    <a href="<?php echo e(asset(ltrim($images->first()->src, '/'))); ?>" class="glightbox view-more text-center d-inline-block square-thumb" data-gallery="k<?php echo e($item->id); ?>">
                                                         <div class="more-placeholder">
-                                                            +<?php echo e($imgs->count() - 4); ?>
+                                                            +<?php echo e($images->count() - 4); ?>
 
                                                             <div class="small text-muted">Lihat semua</div>
                                                         </div>
@@ -89,7 +86,7 @@
                                     <?php endif; ?>
 
                                     <div class="d-flex justify-content-between align-items-center">
-                                        <div class="small text-muted">Diperbarui: <?php echo e(optional($k->updated_at)->format('d M Y')); ?></div>
+                                        <div class="small text-muted">Diperbarui: <?php echo e(optional($item->updated_at)->format('d M Y')); ?></div>
                                     </div>
                                 </div>
                             </div>

@@ -32,29 +32,26 @@
                 </div>
 
                 {{-- Items --}}
-                @forelse($kebs as $k)
+                @forelse($features as $item)
                     @php
-                        $desc = trim(preg_replace('/\s+/', ' ', strip_tags($k->content ?? '')));
-                        $imgs = $k->Keberlanjutan_img ?? collect();
-                        $imgCount = $imgs->count() + (!empty($k->cover) ? 1 : 0);
+                        $images = $item->keberlanjutan_img ?? collect();
+                        $imgCount = $images->count() + (!empty($item->cover) ? 1 : 0);
                         $reverse = ($loop->index % 2) === 1; // alternate layout
                     @endphp
 
                     <article class="card keb-card mb-5 shadow-sm overflow-hidden border-0">
                         <div class="row g-0 align-items-center">
                             <div class="col-lg-5 @if($reverse) order-lg-2 @endif">
-                                @if(!empty($k->cover))
+                                @if(!empty($item->cover))
                                     <div class="thumb h-100 position-relative square-thumb">
-                                        <a href="{{ asset(ltrim($k->cover, '/')) }}" class="glightbox d-block" data-gallery="k{{ $k->id }}" data-title="{{ e($k->title) }}" data-description="">
-                                            <img src="{{ asset(ltrim($k->cover, '/')) }}" alt="{{ $k->title }}" class="thumb-img" loading="lazy" decoding="async">
+                                        <a href="{{ asset(ltrim($item->cover, '/')) }}" class="glightbox d-block" data-gallery="k{{ $item->id }}" data-title="{{ e($item->title) }}" data-description="">
+                                            <img src="{{ asset(ltrim($item->cover, '/')) }}" alt="{{ $item->title }}" class="thumb-img" loading="lazy" decoding="async">
                                         </a>
-
-                                        {{-- anchors for other images were removed to avoid duplicate slides; thumbnails below already provide gallery anchors --}}
 
                                         <div class="img-overlay p-3 d-flex justify-content-between align-items-start">
                                             <div>
-                                                <h5 class="mb-0 text-white fw-bold">{{ $k->title }}</h5>
-                                                <small class="text-white-75">{{ optional($k->updated_at)->format('d M Y') }}</small>
+                                                <h5 class="mb-0 text-white fw-bold">{{ $item->title }}</h5>
+                                                <small class="text-white-75">{{ optional($item->updated_at)->format('d M Y') }}</small>
                                             </div>
                                             <span class="badge bg-success bg-opacity-90">{{ $imgCount }} gambar</span>
                                         </div>
@@ -64,24 +61,24 @@
 
                             <div class="col-lg-7">
                                 <div class="card-body p-4">
-                                    <h3 class="h4 mb-2">{{ $k->title }}</h3>
-                                    <div class="keb-content text-muted mb-3">{!! \Illuminate\Support\Str::limit($k->content ?? '', 320) !!}</div>
+                                    <h3 class="h4 mb-2">{{ $item->title }}</h3>
+                                    <div class="keb-content text-muted mb-3">{!! \Illuminate\Support\Str::limit($item->content ?? '', 320) !!}</div>
 
-                                    @if($imgs->count())
+                                    @if($images->count())
                                         <div class="row g-2 mb-3">
-                                            @foreach($imgs->take(4) as $img)
+                                            @foreach($images->take(4) as $img)
                                                 <div class="col-3">
-                                                    <a href="{{ asset(ltrim($img->src, '/')) }}" class="glightbox keb-thumb square-thumb" data-gallery="k{{ $k->id }}" data-title="{{ e($k->title) }}" data-description="{{ $img->caption ?? '' }}">
-                                                        <img src="{{ asset(ltrim($img->src, '/')) }}" alt="{{ $k->title }}" class="keb-thumb-img" loading="lazy" decoding="async">
+                                                    <a href="{{ asset(ltrim($img->src, '/')) }}" class="glightbox keb-thumb square-thumb" data-gallery="k{{ $item->id }}" data-title="{{ e($item->title) }}" data-description="{{ $img->description }}">
+                                                        <img src="{{ asset(ltrim($img->src, '/')) }}" alt="{{ $item->title }}" class="keb-thumb-img" loading="lazy" decoding="async">
                                                     </a>
                                                 </div>
                                             @endforeach
 
-                                            @if($imgs->count() > 4)
+                                            @if($images->count() > 4)
                                                 <div class="col-3 d-flex align-items-center justify-content-center">
-                                                    <a href="{{ asset(ltrim($imgs->first()->src, '/')) }}" class="glightbox view-more text-center d-inline-block square-thumb" data-gallery="k{{ $k->id }}">
+                                                    <a href="{{ asset(ltrim($images->first()->src, '/')) }}" class="glightbox view-more text-center d-inline-block square-thumb" data-gallery="k{{ $item->id }}">
                                                         <div class="more-placeholder">
-                                                            +{{ $imgs->count() - 4 }}
+                                                            +{{ $images->count() - 4 }}
                                                             <div class="small text-muted">Lihat semua</div>
                                                         </div>
                                                     </a>
@@ -91,7 +88,7 @@
                                     @endif
 
                                     <div class="d-flex justify-content-between align-items-center">
-                                        <div class="small text-muted">Diperbarui: {{ optional($k->updated_at)->format('d M Y') }}</div>
+                                        <div class="small text-muted">Diperbarui: {{ optional($item->updated_at)->format('d M Y') }}</div>
                                     </div>
                                 </div>
                             </div>

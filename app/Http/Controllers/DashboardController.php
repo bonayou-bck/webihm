@@ -96,11 +96,10 @@ class DashboardController extends Controller
 
     public function keberlanjutan()
     {
-        $kebs = \App\Models\Keberlanjutan::with('Keberlanjutan_img')
+        $keberlanjutanItems = \App\Models\Keberlanjutan::with('keberlanjutan_img')
             ->orderByDesc('updated_at')
-            ->get(); // <-- JANGAN di-map/->toArray()
-        // dd($kebs);
-        return view('pages.keberlanjutan', compact('kebs'));
+            ->get();
+        return view('pages.keberlanjutan', ['features' => $keberlanjutanItems]);
     }
 
     public function fasilitas()

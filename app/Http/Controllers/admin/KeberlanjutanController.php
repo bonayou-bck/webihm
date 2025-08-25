@@ -25,41 +25,41 @@ class KeberlanjutanController extends Controller
     }
 
     public function store(Request $request)
-{
-    $data = $request->validate([
-        'title'   => 'required|string|max:255',
-        'slug'    => 'nullable|string|max:255',
-        'content' => 'nullable|string',
-        'cover'   => 'nullable|image|max:2048|mimes:jpg,jpeg,png,webp',
-        'images'  => 'nullable|array|max:5', // maksimal 5 images
-        'images.*' => 'image|max:2048|mimes:jpg,jpeg,png,webp',
-        'descriptions' => 'nullable|array',
-        'descriptions.*' => 'nullable|string|max:500',
-    ]);
+    {
+        $data = $request->validate([
+            'title'   => 'required|string|max:255',
+            'slug'    => 'nullable|string|max:255',
+            'content' => 'nullable|string',
+            'cover'   => 'nullable|image|max:2048|mimes:jpg,jpeg,png,webp',
+            'images'  => 'nullable|array|max:5', // maksimal 5 images
+            'images.*' => 'image|max:2048|mimes:jpg,jpeg,png,webp',
+            'descriptions' => 'nullable|array',
+            'descriptions.*' => 'nullable|string|max:500',
+        ]);
 
-    // Simpan cover
-    if ($request->hasFile('cover')) {
-        $data['cover'] = $request->file('cover')->store('covers', 'public');
-    }
-
-    // Simpan data utama
-    $keberlanjutan = \App\Models\Keberlanjutan::create($data);
-
-    // Simpan images beserta description
-    if ($request->hasFile('images')) {
-        foreach ($request->file('images') as $i => $image) {
-            $path = $image->store('images', 'public');
-            $desc = $request->descriptions[$i] ?? null;
-
-            $keberlanjutan->images()->create([
-                'path' => $path,
-                'description' => $desc,
-            ]);
+        // Simpan cover
+        if ($request->hasFile('cover')) {
+            $data['cover'] = $this->moveToPublicUpload($request->file('cover'), 'keberlanjutan/cover');
         }
-    }
 
-    return redirect()->back()->with('success', 'Data berhasil disimpan!');
-}
+        // Simpan data utama
+        $keberlanjutan = Keberlanjutan::create($data);
+
+        // Simpan images beserta description
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $i => $image) {
+                $path = $this->moveToPublicUpload($image, 'keberlanjutan/detail');
+                $desc = $request->descriptions[$i] ?? null;
+
+                $keberlanjutan->keberlanjutan_img()->create([
+                    'src' => $path,
+                    'description' => $desc,
+                ]);
+            }
+        }
+
+        return redirect()->back()->with('success', 'Data berhasil disimpan!');
+    }
 
 
     public function show($id)
@@ -70,16 +70,20 @@ class KeberlanjutanController extends Controller
 
     public function update(Request $request, $id)
     {
-        $keb = Keberlanjutan::findOrFail($id);
+        $item = Keberlanjutan::findOrFail($id);
 
         $data = $request->validate([
-            'title'       => 'required|string|max:255',
-            'slug'        => 'nullable|string|max:255',
-            'content'     => 'nullable|string',
-            'cover'       => 'nullable|image|max:2048|mimes:jpg,jpeg,png,webp',
-            'images'      => 'nullable',
-            'images.*'    => 'nullable|image|max:2048|mimes:jpg,jpeg,png,webp',
-            'delete_ids'  => 'nullable|string',
+            'title' => 'required|string|max:255',
+            'slug' => 'nullable|string|max:255',
+            'content' => 'nullable|string',
+            'cover' => 'nullable|image|max:2048|mimes:jpg,jpeg,png,webp',
+            'images' => 'nullable',
+            'images.*' => 'nullable|image|max:2048|mimes:jpg,jpeg,png,webp',
+            'delete_ids' => 'nullable|string',
+            'descriptions_existing' => 'nullable|array',
+            'descriptions_existing.*' => 'nullable|string|max:500',
+            'descriptions' => 'nullable|array',
+            'descriptions.*' => 'nullable|string|max:500',
         ]);
 
         try {
@@ -87,27 +91,29 @@ class KeberlanjutanController extends Controller
 
             $slug = trim($data['slug'] ?? '');
             if ($slug === '') {
-                $slug = $keb->slug ?: Str::slug($data['title']);
+                $slug = $item->slug ?: Str::slug($data['title']);
             }
-            if ($slug !== $keb->slug) {
-                $slug = $this->uniqueSlug($slug, $keb->id);
+            if ($slug !== $item->slug) {
+                $slug = $this->uniqueSlug($slug, $item->id);
             }
 
             if ($request->hasFile('cover')) {
-                $this->deletePublicFileIfExists($keb->cover);
-                $stored = $request->file('cover')->store('keberlanjutan', 'public');
-                $keb->cover = 'storage/'.$stored;
+                $this->deletePublicFileIfExists($item->cover);
+                $item->cover = $this->moveToPublicUpload($request->file('cover'), 'keberlanjutan/cover');
             }
 
-            $keb->title   = $data['title'];
-            $keb->slug    = $slug;
-            $keb->content = $data['content'] ?? null;
-            $keb->save();
+            $item->title = $data['title'];
+            $item->slug = $slug;
+            $item->content = $data['content'] ?? null;
+            $item->save();
 
             if (!empty($data['delete_ids'])) {
-                $ids = collect(explode(',', $data['delete_ids']))->filter()->map('intval')->all();
+                $ids = collect(explode(',', $data['delete_ids']))
+                    ->filter()
+                    ->map('intval')
+                    ->all();
                 if (!empty($ids)) {
-                    $imgs = Keberlanjutan_img::where('keberlanjutan_id', $keb->id)->whereIn('id', $ids)->get();
+                    $imgs = Keberlanjutan_img::where('keberlanjutan_id', $item->id)->whereIn('id', $ids)->get();
                     foreach ($imgs as $img) {
                         $this->deletePublicFileIfExists($img->src);
                         $img->delete();
@@ -115,23 +121,33 @@ class KeberlanjutanController extends Controller
                 }
             }
 
-            $files = $this->collectFiles($request, 'images');
-            Log::info('Keberlanjutan update files count', ['count' => count($files)]);
+            $descriptionsExisting = $request->input('descriptions_existing', []);
+            if (is_array($descriptionsExisting) && count($descriptionsExisting) > 0) {
+                foreach ($descriptionsExisting as $imgId => $desc) {
+                    $img = Keberlanjutan_img::where('keberlanjutan_id', $item->id)->where('id', $imgId)->first();
+                    if ($img) {
+                        $img->description = $desc;
+                        $img->save();
+                    }
+                }
+            }
 
+            $files = $this->collectFiles($request, 'images');
             if (count($files) > 0) {
-                $existing = Keberlanjutan_img::where('keberlanjutan_id', $keb->id)->count();
+                $existing = Keberlanjutan_img::where('keberlanjutan_id', $item->id)->count();
                 if ($existing + count($files) > 5) {
                     return redirect()->back()->withInput()->with('error', 'Maksimal total 5 gambar (existing + baru).');
                 }
-                foreach ($files as $file) {
+                $newDescriptions = $request->input('descriptions', []);
+                foreach ($files as $idx => $file) {
                     if (!$file instanceof UploadedFile || !$file->isValid()) {
-                        Log::warning('Invalid uploaded file skipped');
                         continue;
                     }
                     $publicRelative = $this->moveToPublicUpload($file, 'keberlanjutan/detail');
                     Keberlanjutan_img::create([
-                        'keberlanjutan_id' => $keb->id,
+                        'keberlanjutan_id' => $item->id,
                         'src' => $publicRelative,
+                        'description' => $newDescriptions[$idx] ?? null,
                     ]);
                 }
             }
@@ -141,7 +157,7 @@ class KeberlanjutanController extends Controller
         } catch (\Throwable $e) {
             DB::rollBack();
             Log::error('Update Keberlanjutan failed', ['error' => $e->getMessage()]);
-            return back()->with('error', 'Gagal update: '.$e->getMessage());
+            return back()->with('error', 'Gagal update: ' . $e->getMessage());
         }
     }
 
@@ -176,10 +192,8 @@ class KeberlanjutanController extends Controller
         $slug = Str::slug($base);
         $orig = $slug;
         $i = 1;
-        while (Keberlanjutan::where('slug', $slug)
-            ->when($ignoreId, fn($q) => $q->where('id', '<>', $ignoreId))
-            ->exists()) {
-            $slug = $orig.'-'.$i;
+        while (Keberlanjutan::where('slug', $slug)->when($ignoreId, fn($q) => $q->where('id', '<', $ignoreId))->exists()) {
+            $slug = $orig . '-' . $i;
             $i++;
         }
         return $slug;
@@ -188,34 +202,36 @@ class KeberlanjutanController extends Controller
     protected function collectFiles(Request $request, string $key): array
     {
         $files = $request->file($key);
-        if (!$files) return [];
+        if (!$files) {
+            return [];
+        }
         return is_array($files) ? array_values(array_filter($files)) : [$files];
     }
 
     protected function moveToPublicUpload(UploadedFile $file, string $subdir): string
     {
         $subdir = trim($subdir, '/');
-        $targetDir = public_path('upload'.DIRECTORY_SEPARATOR.$subdir);
+        $targetDir = public_path('upload' . DIRECTORY_SEPARATOR . $subdir);
         if (!is_dir($targetDir)) {
             @mkdir($targetDir, 0775, true);
         }
 
-        $ext = $file->getClientOriginalExtension();
-        if (!$ext) {
-            $ext = 'jpg';
-        }
-        $name = (string) Str::uuid().'.'.$ext;
+        $ext = $file->getClientOriginalExtension() ?: 'jpg';
+        $name = (string) Str::uuid() . '.' . $ext;
         $file->move($targetDir, $name);
 
-        return 'upload/'.$subdir.'/'.$name;
+        // path relatif untuk disimpan ke DB
+        return 'upload/' . $subdir . '/' . $name;
     }
 
     protected function deletePublicFileIfExists(?string $publicPath): void
     {
-        if (!$publicPath) return;
+        if (!$publicPath) {
+            return;
+        }
 
-        if (str_starts_with($publicPath, 'storage/')) {
-            $relative = substr($publicPath, strlen('storage/'));
+        if (str_starts_with($publicPath, 'upload/')) {
+            $relative = substr($publicPath, strlen('upload/'));
             if (Storage::disk('public')->exists($relative)) {
                 Storage::disk('public')->delete($relative);
             }

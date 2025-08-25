@@ -102,13 +102,13 @@
                             <textarea name="content" class="form-control" rows="4"></textarea>
                         </div>
 
-                        <div class="col-md-6">
+                        <div class="col-12">
                             <label class="form-label">Cover (opsional)</label>
                             <input type="file" name="cover" id="createCover" class="form-control" accept="image/*">
                             <div id="createCoverPreview" class="mt-2"></div>
                         </div>
 
-                        <div class="col-md-6">
+                        <div class="col-12">
                             <div class="d-flex justify-content-between align-items-center">
                                 <label class="form-label mb-0">Gambar Galeri (maks 5)</label>
                                 <small class="text-muted">jpg/png/webp ≤2MB</small>
@@ -152,13 +152,13 @@
                             <textarea name="content" id="editContent" class="form-control" rows="4"></textarea>
                         </div>
 
-                        <div class="col-md-6">
+                        <div class="col-12">
                             <label class="form-label">Ganti Cover (opsional)</label>
                             <input type="file" name="cover" id="editCover" class="form-control" accept="image/*">
                             <div id="editCoverPreview" class="mt-2"></div>
                         </div>
 
-                        <div class="col-md-6">
+                        <div class="col-12">
                             <div class="d-flex justify-content-between align-items-center">
                                 <label class="form-label mb-0">Tambah Gambar Galeri (opsional)</label>
                                 <small class="text-muted">jpg/png/webp ≤2MB</small>
@@ -210,7 +210,7 @@
     @push('scripts')
         <script>
             document.addEventListener('DOMContentLoaded', function() {
-                // DataTables init (aman dari re-init)
+                // DataTables init
                 if (!$.fn.DataTable.isDataTable('#tblKeberlanjutan')) {
                     $('#tblKeberlanjutan').DataTable({
                         pageLength: 5,
@@ -242,14 +242,15 @@
                     }
                 });
 
-                // CREATE preview images
+                // CREATE preview images with description inputs
                 document.getElementById('createImages')?.addEventListener('change', function() {
                     const wrap = document.getElementById('createPreview');
                     wrap.innerHTML = '';
                     const files = [...this.files].slice(0, 5);
-                    files.forEach(file => {
+                    files.forEach((file, i) => {
                         const col = document.createElement('div');
-                        col.className = 'col-4 col-md-3';
+                        col.className = 'col-6 col-md-3';
+
                         const card = document.createElement('div');
                         card.className = 'thumb';
                         const img = document.createElement('img');
@@ -259,15 +260,19 @@
                         fr.readAsDataURL(file);
                         card.appendChild(img);
                         col.appendChild(card);
+
+                        const descInput = document.createElement('input');
+                        descInput.type = 'text';
+                        descInput.name = 'descriptions[]';
+                        descInput.className = 'form-control mt-1';
+                        descInput.placeholder = 'Deskripsi gambar ' + (i + 1);
+                        col.appendChild(descInput);
+
                         wrap.appendChild(col);
                     });
-                    if (this.files.length > 5) {
-                        alert('Maksimal 5 gambar.');
-                        this.value = '';
-                    }
                 });
 
-                // OPEN EDIT
+                // OPEN EDIT MODAL
                 document.addEventListener('click', async function(ev) {
                     const btn = ev.target.closest('.form-button-action .btn-link.btn-primary');
                     if (!btn) return;
@@ -283,21 +288,17 @@
                         if (!res.ok) throw new Error('Gagal mengambil data');
                         const data = await res.json();
 
-                        // set action form
-                        const form = document.getElementById('editForm') || document.querySelector('#modalEdit form');
-if (!form) {
-    console.warn('Edit form not found');
-    alert('Form edit tidak ditemukan. Silakan muat ulang halaman.');
-    return;
-}
-form.action = `{{ url('admin/keberlanjutan') }}/${id}`;
+                        const form = document.getElementById('editForm');
+                        if (!form) {
+                            console.warn('Edit form not found');
+                            return;
+                        }
+                        form.action = `{{ url('admin/keberlanjutan') }}/${id}`;
 
-                        // isi field
                         document.getElementById('editTitle').value = data.title ?? '';
                         document.getElementById('editSlug').value = data.slug ?? '';
                         document.getElementById('editContent').value = data.content ?? '';
 
-                        // cover preview
                         document.getElementById('editCover').value = '';
                         const coverBox = document.getElementById('editCoverPreview');
                         coverBox.innerHTML = '';
@@ -310,83 +311,108 @@ form.action = `{{ url('admin/keberlanjutan') }}/${id}`;
                             coverBox.appendChild(img);
                         }
 
-                        // existing images
                         const wrap = document.getElementById('existingWrap');
                         wrap.innerHTML = '';
-                        (data.Keberlanjutan_img || []).forEach(img => {
+                        window.keberlanjutanDelSet = new Set();
+                        (data.keberlanjutan_img || []).forEach(img => {
                             const col = document.createElement('div');
-                            col.className = 'col-4 col-md-3';
+                            col.className = 'col-6 col-md-3';
                             col.dataset.id = img.id;
+
                             const card = document.createElement('div');
                             card.className = 'thumb';
+
                             const del = document.createElement('button');
                             del.type = 'button';
                             del.className = 'btn btn-sm btn-danger del';
                             del.dataset.id = img.id;
-                            del.innerHTML = '&times;';
+                            del.onclick = function() {
+                                window.keberlanjutanDelSet.add(img.id);
+                                col.remove();
+                                document.getElementById('delete_ids').value = [...window
+                                    .keberlanjutanDelSet
+                                ].join(',');
+                            };
+
                             const image = document.createElement('img');
                             image.src = `/${img.src}`;
                             image.alt = 'img-' + img.id;
                             card.appendChild(del);
                             card.appendChild(image);
                             col.appendChild(card);
+
+                            const descText = document.createElement('div');
+                            descText.className = 'small text-muted mt-2';
+                            descText.textContent = img.description || '';
+                            col.appendChild(descText);
+
+                            const descInput = document.createElement('input');
+                            descInput.type = 'text';
+                            descInput.name = `descriptions_existing[${img.id}]`;
+                            descInput.className = 'form-control mt-1';
+                            descInput.value = img.description || '';
+                            descInput.placeholder = 'Edit deskripsi';
+                            descInput.addEventListener('input', function() {
+                                descText.textContent = this.value;
+                            });
+                            col.appendChild(descInput);
+
                             wrap.appendChild(col);
                         });
-
-                        // reset delete_ids
                         document.getElementById('delete_ids').value = '';
 
-                        // show modal
-                        const modal = new bootstrap.Modal(document.getElementById('modalEdit'));
-                        modal.show();
+                        const modalEditEl = document.getElementById('modalEdit');
+                        let modalEdit = bootstrap.Modal.getInstance(modalEditEl);
+                        if (!modalEdit) {
+                            modalEdit = new bootstrap.Modal(modalEditEl);
+                        }
+                        modalEdit.show();
                     } catch (err) {
                         alert(err.message || 'Terjadi kesalahan');
                     }
                 });
-            });
 
-            // EDIT preview images (baru)
-            document.getElementById('editImages')?.addEventListener('change', function() {
-                const wrap = document.getElementById('editPreview');
-                wrap.innerHTML = '';
-                [...this.files].forEach(file => {
-                    const col = document.createElement('div');
-                    col.className = 'col-4 col-md-3';
-                    const card = document.createElement('div');
-                    card.className = 'thumb';
-                    const img = document.createElement('img');
-                    img.alt = file.name;
-                    const fr = new FileReader();
-                    fr.onload = ev => img.src = ev.target.result;
-                    fr.readAsDataURL(file);
-                    card.appendChild(img);
-                    col.appendChild(card);
-                    wrap.appendChild(col);
+                // EDIT preview new images
+                document.getElementById('editImages')?.addEventListener('change', function() {
+                    const wrap = document.getElementById('editPreview');
+                    wrap.innerHTML = '';
+                    const files = [...this.files].slice(0, 5);
+                    files.forEach((file, i) => {
+                        const col = document.createElement('div');
+                        col.className = 'col-6 col-md-3';
+
+                        const card = document.createElement('div');
+                        card.className = 'thumb';
+                        const img = document.createElement('img');
+                        img.alt = file.name;
+                        const fr = new FileReader();
+                        fr.onload = ev => img.src = ev.target.result;
+                        fr.readAsDataURL(file);
+                        card.appendChild(img);
+                        col.appendChild(card);
+
+                        const descInput = document.createElement('input');
+                        descInput.type = 'text';
+                        descInput.name = 'descriptions[]';
+                        descInput.className = 'form-control mt-2';
+                        descInput.placeholder = 'Deskripsi gambar ' + (i + 1);
+                        col.appendChild(descInput);
+
+                        wrap.appendChild(col);
+                    });
                 });
-            });
 
-            // Hapus gambar existing (toggle)
-            const delSet = new Set();
-            document.getElementById('existingWrap')?.addEventListener('click', function(e) {
-                if (e.target.classList.contains('del')) {
-                    const id = e.target.dataset.id;
-                    delSet.add(id);
-                    // remove element dari DOM
-                    e.target.closest('.col-4, .col-md-3').remove();
-                    document.getElementById('delete_ids').value = [...delSet].join(',');
-                }
-            });
-
-            // Delegated delete handler so it still works after DataTables redraws
-            document.addEventListener('click', function(ev) {
-                const btn = ev.target.closest('.btn-delete');
-                if (!btn) return;
-                const id = btn.getAttribute('data-id');
-                if (!id) return;
-                if (!confirm('Yakin hapus data ini beserta gambarnya?')) return;
-                const form = document.getElementById('deleteForm');
-                form.action = `{{ url('admin/keberlanjutan') }}/${id}`; // /admin/keberlanjutan/{id}
-                form.submit();
+                // Delegated delete handler
+                document.addEventListener('click', function(ev) {
+                    const btn = ev.target.closest('.btn-delete');
+                    if (!btn) return;
+                    const id = btn.getAttribute('data-id');
+                    if (!id) return;
+                    if (!confirm('Yakin hapus data ini beserta gambarnya?')) return;
+                    const form = document.getElementById('deleteForm');
+                    form.action = `{{ url('admin/keberlanjutan') }}/${id}`;
+                    form.submit();
+                });
             });
         </script>
     @endpush

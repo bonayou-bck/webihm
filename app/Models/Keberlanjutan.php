@@ -29,7 +29,7 @@ class Keberlanjutan extends Model
     {
         return $this->hasMany(BlogHistory::class, 'keberlanjutan_id', 'id');
     }
-    public function Keberlanjutan_img(): HasMany
+    public function keberlanjutan_img(): HasMany
     {
         return $this->hasMany(Keberlanjutan_img::class, 'keberlanjutan_id', 'id');
     }
