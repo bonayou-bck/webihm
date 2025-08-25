@@ -50,17 +50,51 @@
                     </div>
 
                     <div class="col-lg-6">
-                        <div class="image-wrapper">
-                            <img src="{{ asset('assets/img/about/nursery.jpg') }}" alt="About Us"
-                                class="img-fluid main-image">
-                            <div class="floating-card">
-                                <div class="card-content">
-                                    <i class="bi bi-award"></i>
-                                    <div class="text">
-                                        <h5>Excellence Award</h5>
-                                        <span>Digital Innovation 2023</span>
-                                    </div>
+                        <div id="aboutCarousel" class="carousel slide carousel-fade image-wrapper" data-bs-ride="carousel"
+                            data-bs-interval="4000" data-bs-pause="false">
+
+                            <div class="carousel-inner">
+
+                                <!-- Slide 1 -->
+                                <div class="carousel-item active">
+                                    <img src="{{ asset('assets/img/about/nursery.jpg') }}"
+                                        class="d-block w-100 carousel-img" alt="Nursery">
                                 </div>
+
+                                <!-- Slide 2 -->
+                                <div class="carousel-item">
+                                    <img src="{{ asset('assets/img/bg/bg-14.JPG') }}" class="d-block w-100 carousel-img"
+                                        alt="Hutan" loading="lazy">
+                                </div>
+
+                                <!-- Slide 3 -->
+                                <div class="carousel-item">
+                                    <img src="{{ asset('assets/img/hrweb.jpg') }}" class="d-block w-100 carousel-img"
+                                        alt="HR Web" loading="lazy">
+                                </div>
+
+                            </div>
+
+                            <!-- Controls -->
+                            <button class="carousel-control-prev" type="button" data-bs-target="#aboutCarousel"
+                                data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Previous</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#aboutCarousel"
+                                data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Next</span>
+                            </button>
+
+                            <!-- Indicators -->
+                            <div class="carousel-indicators">
+                                <button type="button" data-bs-target="#aboutCarousel" data-bs-slide-to="0" class="active"
+                                    aria-label="Slide 1"></button>
+                                <button type="button" data-bs-target="#aboutCarousel" data-bs-slide-to="1"
+                                    aria-label="Slide 2"></button>
+                                <button type="button" data-bs-target="#aboutCarousel" data-bs-slide-to="2"
+                                    aria-label="Slide 3"></button>
                             </div>
                         </div>
                     </div>
@@ -205,10 +239,7 @@
                                     ekosistem, dan mendorong inovasi. Dengan dedikasi dan persatuan, kami tidak hanya
                                     menanam pohon, namun juga memupuk budaya di mana perempuan bisa berkembang, sehingga
                                     memberikan dampak jangka panjang pada industri dan dunia. Bergabunglah bersama kami
-                                    saat kami membuka jalan menuju masa depan yang lebih hijau dan inklusif.</p>
-                                <!-- <div class="mt-4" data-aos-duration="1100">
-                                                                                        <a href="#" class="btn-consultation"><span>Request a Consultation</span><i class="bi bi-arrow-right"></i></a>
-                                                                                      </div> -->
+                                    saat kami membuka jalan menuju masa depan yang lebih hijau dan inkluswif.</p>
                             </div>
                         </div>
                         <div class="col-lg-6">
@@ -247,13 +278,13 @@
                                         <li data-filter=".{{ $f['class'] }}">{{ $f['title'] }}</li>
                                     @endforeach
                                     <li>
-                                        <a href="{{ route('pages.keberlanjutan') }}"
-                                            style="text-decoration:none; color:inherit;">
-                                            Selengkapnya >>
+                                        <a href="{{ route('pages.keberlanjutan') }}" class="more-link"
+                                            aria-label="Lihat semua fasilitas">
+                                            Selengkapnya
+                                            <i class="bi bi-arrow-right-short"></i>
                                         </a>
                                     </li>
                                 </ul>
-
                             </div>
                         </div>
 
@@ -280,8 +311,6 @@
                                 </div>
                             @endforeach
                         </div>
-
-
                     </div>
 
                 </div>

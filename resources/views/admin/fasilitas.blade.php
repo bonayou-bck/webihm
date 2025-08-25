@@ -439,14 +439,16 @@
                 }
             });
 
-            // DELETE record
-            document.querySelectorAll('.btn-delete').forEach(function(btn) {
-                btn.addEventListener('click', function() {
-                    const id = this.getAttribute('data-id');
-                    const form = document.getElementById('deleteForm');
-                    form.action = `{{ url('admin/fasilitas') }}/${id}`;
-                    form.submit();
-                });
+            // Delegated delete handler so it still works after DataTables redraws
+            document.addEventListener('click', function(ev) {
+                const btn = ev.target.closest('.btn-delete');
+                if (!btn) return;
+                const id = btn.getAttribute('data-id');
+                if (!id) return;
+                if (!confirm('Yakin hapus data ini beserta gambarnya?')) return;
+                const form = document.getElementById('deleteForm');
+                form.action = `{{ url('admin/fasilitas') }}/${id}`;
+                form.submit();
             });
         </script>
     @endpush

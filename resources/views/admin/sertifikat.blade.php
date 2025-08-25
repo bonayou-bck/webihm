@@ -66,8 +66,8 @@
                                             title="Edit" class="btn btn-link btn-primary btn-lg">
                                             <i class="fa fa-edit"></i>
                                         </button>
-                                        <button type="button" data-bs-toggle="tooltip" title="Remove"
-                                            class="btn btn-link btn-danger">
+                                        <button type="button" data-id="{{ $row->id }}" data-bs-toggle="tooltip" title="Remove"
+                                            class="btn btn-link btn-danger btn-delete">
                                             <i class="fa fa-times"></i>
                                         </button>
                                     </div>
@@ -79,6 +79,12 @@
             </div>
         </div>
     </div>
+
+    {{-- Hidden delete form (server-rendered) --}}
+    <form id="deleteForm" method="POST" style="display:none;">
+        @csrf
+        @method('DELETE')
+    </form>
 
     {{-- Modal: Tambah Berita (tetap) --}}
     <div class="modal fade" id="modalCreate" tabindex="-1" aria-hidden="true">
@@ -306,6 +312,18 @@
                     console.error(err);
                     alert('Tidak dapat memuat data sertifikat.');
                 }
+            });
+
+            // Delegated delete handler so it works after DataTables redraws
+            document.addEventListener('click', function(ev) {
+                const btn = ev.target.closest('.btn-delete');
+                if (!btn) return;
+                const id = btn.getAttribute('data-id');
+                if (!id) return;
+                // if (!confirm('Yakin hapus sertifikat ini?')) return;
+                const form = document.getElementById('deleteForm');
+                form.action = `{{ url('admin/sertifikat') }}/${id}`;
+                form.submit();
             });
         });
     </script>

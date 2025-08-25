@@ -3,138 +3,101 @@
 @section('title', 'Dashboard')
 
 @push('styles')
-{{-- CSS khusus halaman ini kalau perlu --}}
+    {{-- CSS khusus halaman ini kalau perlu --}}
 @endpush
 
 @section('content')
-  {{-- Header page --}}
-  <div class="d-flex align-items-left align-items-md-center flex-column flex-md-row pt-2 pb-4">
-    <div>
-      <h3 class="fw-bold mb-3">Dashboard</h3>
-      <h6 class="op-7 mb-2">Free Bootstrap 5 Admin Dashboard</h6>
+    {{-- Header page --}}
+    <div class="d-flex align-items-left align-items-md-center flex-column flex-md-row pt-2 pb-4">
+        <div>
+            <h3 class="fw-bold mb-3">Admin Itci hutani Manunggal</h3>
+            {{-- <h6 class="op-7 mb-2">Free Bootstrap 5 Admin Dashboard</h6> --}}
+        </div>
+        {{-- <div class="ms-md-auto py-2 py-md-0">
+            <a href="#" class="btn btn-label-info btn-round me-2">Manage</a>
+            <a href="#" class="btn btn-primary btn-round">Add Customer</a>
+        </div> --}}
     </div>
-    <div class="ms-md-auto py-2 py-md-0">
-      <a href="#" class="btn btn-label-info btn-round me-2">Manage</a>
-      <a href="#" class="btn btn-primary btn-round">Add Customer</a>
-    </div>
-  </div>
 
-  {{-- Cards ringkas (contoh) --}}
-  <div class="row">
-    <div class="col-sm-6 col-md-3">
-      <div class="card card-stats card-round">
-        <div class="card-body">
-          <div class="row align-items-center">
-            <div class="col-icon"><div class="icon-big text-center icon-primary bubble-shadow-small"><i class="fas fa-users"></i></div></div>
-            <div class="col col-stats ms-3 ms-sm-0">
-              <div class="numbers"><p class="card-category">Visitors</p><h4 class="card-title">1,294</h4></div>
+    {{-- Cards ringkas (contoh) --}}
+    <div class="row">
+        <div class="col-sm-6 col-md-3">
+            <div class="card card-stats card-round">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-icon">
+                            <div class="icon-big text-center icon-primary bubble-shadow-small"><i class="fas fa-newspaper"></i>
+                            </div>
+                        </div>
+                        <div class="col col-stats ms-3 ms-sm-0">
+                            <div class="numbers">
+                                <p class="card-category">Berita</p>
+                                <h4 class="card-title">{{ $blog }}</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
+        <div class="col-sm-6 col-md-3">
+            <div class="card card-stats card-round">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-icon">
+                            <div class="icon-big text-center icon-primary bubble-shadow-small"><i class="fas fa-award"></i>
+                            </div>
+                        </div>
+                        <div class="col col-stats ms-3 ms-sm-0">
+                            <div class="numbers">
+                                <p class="card-category">Sertifikat</p>
+                                <h4 class="card-title">{{ $certificate }}</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-3">
+            <div class="card card-stats card-round">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-icon">
+                            <div class="icon-big text-center icon-primary bubble-shadow-small"><i class="fas fa-seedling"></i>
+                            </div>
+                        </div>
+                        <div class="col col-stats ms-3 ms-sm-0">
+                            <div class="numbers">
+                                <p class="card-category">Keberlanjutan</p>
+                                <h4 class="card-title">{{ $keberlanjutan }}</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-3">
+            <div class="card card-stats card-round">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-icon">
+                            <div class="icon-big text-center icon-primary bubble-shadow-small"><i class="fas fa-building"></i>
+                            </div>
+                        </div>
+                        <div class="col col-stats ms-3 ms-sm-0">
+                            <div class="numbers">
+                                <p class="card-category">Fasilitas</p>
+                                <h4 class="card-title">{{ $fasilitas }}</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    {{-- ...duplikasi 3 card lain sesuai kebutuhan... --}}
-  </div>
-
-  {{-- Contoh chart & tabel, ambil dari template asli --}}
-  <div class="row">
-    <div class="col-md-8">
-      <div class="card card-round">
-        <div class="card-header">
-          <div class="card-head-row">
-            <div class="card-title">User Statistics</div>
-            <div class="card-tools">
-              <a href="#" class="btn btn-label-success btn-round btn-sm me-2">
-                <span class="btn-label"><i class="fa fa-pencil"></i></span> Export
-              </a>
-              <a href="#" class="btn btn-label-info btn-round btn-sm">
-                <span class="btn-label"><i class="fa fa-print"></i></span> Print
-              </a>
-            </div>
-          </div>
-        </div>
-        <div class="card-body">
-          <div class="chart-container" style="min-height: 375px">
-            <canvas id="statisticsChart"></canvas>
-          </div>
-          <div id="myChartLegend"></div>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-4">
-      <div class="card card-primary card-round">
-        <div class="card-header">
-          <div class="card-head-row">
-            <div class="card-title">Daily Sales</div>
-            <div class="card-tools">
-              <div class="dropdown">
-                <button class="btn btn-sm btn-label-light dropdown-toggle" type="button" data-bs-toggle="dropdown">Export</button>
-                <div class="dropdown-menu"><a class="dropdown-item" href="#">Action</a></div>
-              </div>
-            </div>
-          </div>
-          <div class="card-category">March 25 - April 02</div>
-        </div>
-        <div class="card-body pb-0">
-          <div class="mb-4 mt-2"><h1>$4,578.58</h1></div>
-          <div class="pull-in"><canvas id="dailySalesChart"></canvas></div>
-        </div>
-      </div>
-      <div class="card card-round">
-        <div class="card-body pb-0">
-          <div class="h1 fw-bold float-end text-primary">+5%</div>
-          <h2 class="mb-2">17</h2>
-          <p class="text-muted">Users online</p>
-          <div class="pull-in sparkline-fix"><div id="lineChart"></div></div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  {{-- Tabel contoh --}}
-  <div class="row">
-    <div class="col-md-12">
-      <div class="card card-round">
-        <div class="card-header">
-          <div class="card-head-row card-tools-still-right">
-            <h4 class="card-title">Users Geolocation</h4>
-            <div class="card-tools">
-              <button class="btn btn-icon btn-link btn-primary btn-xs"><span class="fa fa-angle-down"></span></button>
-              <button class="btn btn-icon btn-link btn-primary btn-xs btn-refresh-card"><span class="fa fa-sync-alt"></span></button>
-              <button class="btn btn-icon btn-link btn-primary btn-xs"><span class="fa fa-times"></span></button>
-            </div>
-          </div>
-          <p class="card-category">Map of the distribution of users around the world</p>
-        </div>
-        <div class="card-body">
-          <div class="row">
-            <div class="col-md-6">
-              <div class="table-responsive table-hover table-sales">
-                <table class="table">
-                  <tbody>
-                    <tr>
-                      <td><div class="flag"><img src="{{ asset('assets/img/flags/id.png') }}" alt="indonesia" /></div></td>
-                      <td>Indonesia</td>
-                      <td class="text-end">2.320</td>
-                      <td class="text-end">42.18%</td>
-                    </tr>
-                    {{-- ...baris lain... --}}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="mapcontainer"><div id="world-map" class="w-100" style="height:300px"></div></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
 @endsection
 
 @push('scripts')
-<script>
-  // tempatkan JS khusus halaman (chart init, dsb) kalau perlu
-</script>
+    <script>
+        // tempatkan JS khusus halaman (chart init, dsb) kalau perlu
+    </script>
 @endpush

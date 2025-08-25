@@ -40,7 +40,7 @@
                                                     {{-- hidden anchors for other gallery images so GLightbox can slide the whole gallery when cover is clicked --}}
                                                     @if(!empty($item->Fasilitas_img) && count($item->Fasilitas_img))
                                                         @foreach($item->Fasilitas_img as $gimg)
-                                                            <a href="{{ asset(ltrim($gimg->src, '/')) }}" class="glightbox d-none" data-gallery="fasilitas-{{ $item->id }}" data-title="{{ $item->title }}" data-description="{{ $gimg->description ?? '' }}"></a>
+                                                            <a href="{{ asset(ltrim($gimg->src, '/')) }}" class="glightbox d-none" data-gallery="fasilitas-{{ $item->id }}" data-title="{{ $item->title }}"></a>
                                                         @endforeach
                                                     @endif
                                                     <div class="img-overlay d-flex justify-content-between align-items-start p-2">

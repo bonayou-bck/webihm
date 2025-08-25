@@ -54,13 +54,13 @@ class BeritaController extends Controller
         }
 
         // (Opsional) simpan user pembuat jika ada auth
-        if (auth()->check() && schema()->hasColumn('blogs','created_by')) {
-            $data['created_by'] = auth()->id();
-        }
+        // if (auth()->check() && schema()->hasColumn('blogs','created_by')) {
+        //     $data['created_by'] = auth()->id();
+        // }
 
         Blog::create($data);
 
-        return redirect()->back()->with('success', 'Berita berhasil ditambahkan.');
+        return redirect()->back()->with('success', 'Data berhasil disimpan!');
     }
 
     /**

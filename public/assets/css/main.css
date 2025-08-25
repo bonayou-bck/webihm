@@ -507,6 +507,10 @@ h6 {
     /* Hide Mobile Megamenu in Desktop */
     /* Tab Navigation */
     /* Tab Content */
+    /* Fasilitas Section - Active Tab Hijau */
+    .features .nav-tabs .nav-link.active {
+      color: #12a16b !important; /* hijau, override jika ada warna lain */
+    }
   }
 
   .navmenu .megamenu-2 .mobile-megamenu {
@@ -2287,6 +2291,21 @@ section,
   color: color-mix(in srgb, var(--contrast-color), transparent 20%);
 }
 
+/* Override: make active tab text and icon green while keeping a light background */
+.features .nav-tabs .nav-link.active {
+  background: var(--surface-color) !important;
+}
+.features .nav-tabs .nav-link.active h4,
+.features .nav-tabs .nav-link.active p {
+  color: var(--accent-color) !important;
+}
+.features .nav-tabs .nav-link.active .icon-box {
+  background: color-mix(in srgb, var(--accent-color), transparent 92%) !important;
+}
+.features .nav-tabs .nav-link.active .icon-box i {
+  color: var(--accent-color) !important;
+}
+
 .features .tab-content .content-box {
   background: var(--surface-color);
   border-radius: 16px;
@@ -3461,6 +3480,12 @@ section,
 .testimonials .testimonials-slider {
   overflow: hidden;
 }
+
+.carousel-img {
+    height: 520px; /* atur sesuai kebutuhan (misalnya 400-500px) */
+    object-fit: cover; /* biar gambar ter-crop rapi tanpa distorsi */
+    border-radius: 8px; /* opsional, kasih sudut lembut */
+  }
 
 .testimonials .testimonial-item {
   box-sizing: content-box;

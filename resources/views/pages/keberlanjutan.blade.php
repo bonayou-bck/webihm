@@ -49,10 +49,7 @@
                                             <img src="{{ asset(ltrim($k->cover, '/')) }}" alt="{{ $k->title }}" class="thumb-img" loading="lazy" decoding="async">
                                         </a>
 
-                                        {{-- hidden anchors for other images so GLightbox can slide --}}
-                                        @foreach($imgs as $gimg)
-                                            <a href="{{ asset(ltrim($gimg->src, '/')) }}" class="glightbox d-none" data-gallery="k{{ $k->id }}" data-title="{{ e($k->title) }}" data-description="{{ $gimg->caption ?? '' }}"></a>
-                                        @endforeach
+                                        {{-- anchors for other images were removed to avoid duplicate slides; thumbnails below already provide gallery anchors --}}
 
                                         <div class="img-overlay p-3 d-flex justify-content-between align-items-start">
                                             <div>
@@ -115,7 +112,8 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             if (window.GLightbox) {
-                GLightbox({ selector: '.glightbox', touchNavigation: true, loop: true });
+                // Disable looping so lightbox doesn't cycle back to the first image
+                GLightbox({ selector: '.glightbox', touchNavigation: true, loop: false });
             }
         });
     </script>

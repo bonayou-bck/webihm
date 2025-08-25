@@ -38,7 +38,7 @@
                                                     
                                                     <?php if(!empty($item->Fasilitas_img) && count($item->Fasilitas_img)): ?>
                                                         <?php $__currentLoopData = $item->Fasilitas_img; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $gimg): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                            <a href="<?php echo e(asset(ltrim($gimg->src, '/'))); ?>" class="glightbox d-none" data-gallery="fasilitas-<?php echo e($item->id); ?>" data-title="<?php echo e($item->title); ?>" data-description="<?php echo e($gimg->description ?? ''); ?>"></a>
+                                                            <a href="<?php echo e(asset(ltrim($gimg->src, '/'))); ?>" class="glightbox d-none" data-gallery="fasilitas-<?php echo e($item->id); ?>" data-title="<?php echo e($item->title); ?>"></a>
                                                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                                     <?php endif; ?>
                                                     <div class="img-overlay d-flex justify-content-between align-items-start p-2">

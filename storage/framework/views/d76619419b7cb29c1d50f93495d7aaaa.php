@@ -47,9 +47,6 @@
                                         </a>
 
                                         
-                                        <?php $__currentLoopData = $imgs; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $gimg): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                            <a href="<?php echo e(asset(ltrim($gimg->src, '/'))); ?>" class="glightbox d-none" data-gallery="k<?php echo e($k->id); ?>" data-title="<?php echo e(e($k->title)); ?>" data-description="<?php echo e($gimg->caption ?? ''); ?>"></a>
-                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
                                         <div class="img-overlay p-3 d-flex justify-content-between align-items-start">
                                             <div>
@@ -113,7 +110,8 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             if (window.GLightbox) {
-                GLightbox({ selector: '.glightbox', touchNavigation: true, loop: true });
+                // Disable looping so lightbox doesn't cycle back to the first image
+                GLightbox({ selector: '.glightbox', touchNavigation: true, loop: false });
             }
         });
     </script>
