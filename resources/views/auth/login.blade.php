@@ -1,123 +1,287 @@
+<!doctype html>
+<html lang="en">
 
-<div class="auth-page-wrapper pt-5">
-	<!-- auth page bg -->
-	<div class="auth-one-bg-position auth-one-bg" id="auth-particles">
-		<div class="bg-overlay"></div>
+<head>
+    <meta charset="utf-8">
+    <title>Login • IHM System</title>
+    <link rel="icon" href="{{ URL::asset('assets/img/logoIHM.png') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-		<div class="shape">
-			<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1440 120">
-				<path d="M 0,36 C 144,53.6 432,123.2 720,124 C 1008,124.8 1296,56.8 1440,40L1440 140L0 140z"></path>
-			</svg>
-		</div>
-	</div>
+    {{-- Bootstrap 5 + Icons (CDN) --}}
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
 
-	<!-- auth page content -->
-	<div class="auth-page-content">
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-12">
-					<div class="text-center mt-sm-5 mb-4 text-white-50">
-						<div>
-							<a href="index" class="d-inline-block auth-logo">
-								<img src="{{ URL::asset('build/images/logo-light.png')}}" alt="" height="20">
-							</a>
-						</div>
-						<p class="mt-3 fs-15 fw-medium">Premium Admin & Dashboard Template</p>
-					</div>
-				</div>
-			</div>
-			<!-- end row -->
+    <style>
+        :root {
+            --forest-700: #2e7d32;
+            --forest-600: #388e3c;
+            --forest-500: #43a047;
+            --forest-400: #66bb6a;
+            --forest-200: #c8e6c9;
+            --bark-700: #4e342e;
+        }
 
-			<div class="row justify-content-center">
-				<div class="col-md-8 col-lg-6 col-xl-5">
-					<div class="card mt-4">
+        html,
+        body {
+            height: 100%;
+        }
 
-						<div class="card-body p-4">
-							<div class="text-center mt-2">
-								<h5 class="text-primary">Welcomess Back !</h5>
-								<p class="text-muted">Sign in to continue to Velzon.</p>
-							</div>
-							<div class="p-2 mt-4">
-								<form action="{{ route('login') }}" method="POST">
-									@csrf
-									<div class="mb-3">
-										<label for="username" class="form-label">Username</label>
-										<input type="text" class="form-control @error('email') is-invalid @enderror" value="{{ old('email', 'admin@mail.com') }}" id="username" name="email" placeholder="Enter username">
-										@error('email')
-										<span class="invalid-feedback" role="alert">
-											<strong>{{ $message }}</strong>
-										</span>
-										@enderror
-									</div>
+        body {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("{{ asset('assets/img/bg/bg-14.JPG') }}");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            min-height: 100vh;
+            color: #1b1b1b;
+            display: flex;
+            flex-direction: column;
+        }
 
-									<div class="mb-3">
-										<div class="float-end">
-											<a href="{{ route('password.update') }}" class="text-muted">Forgot password?</a>
-										</div>
-										<label class="form-label" for="password-input">Password</label>
-										<div class="position-relative auth-pass-inputgroup mb-3">
-											<input type="password" class="form-control password-input pe-5 @error('password') is-invalid @enderror" name="password" placeholder="Enter password" id="password-input" value="123">
-											<button class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon" type="button" id="password-addon"><i class="ri-eye-fill align-middle"></i></button>
-											@error('password')
-											<span class="invalid-feedback" role="alert">
-												<strong>{{ $message }}</strong>
-											</span>
-											@enderror
-										</div>
-									</div>
+        main {
+            flex-grow: 1;
+        }
 
-									<div class="form-check">
-										<input class="form-check-input" type="checkbox" value="" id="auth-remember-check">
-										<label class="form-check-label" for="auth-remember-check">Remember me</label>
-									</div>
+        /* Forest header wave with trees silhouette */
+        .forest-hero {
+            position: relative;
+            min-height: 220px;
+            background: transparent;
+            border-bottom-left-radius: 24px;
+            border-bottom-right-radius: 24px;
+            box-shadow: none;
+        }
 
-									<div class="mt-4">
-										<button class="btn btn-success w-100" type="submit">Sign In</button>
-									</div>
+        .forest-hero::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(700px 180px at 50% 0, rgba(255, 255, 255, .15), transparent 60%);
+            pointer-events: none;
+            border-bottom-left-radius: 24px;
+            border-bottom-right-radius: 24px;
+        }
 
-									<div class="mt-4 text-center">
-										<div class="signin-other-title">
-											<h5 class="fs-13 mb-4 title">Sign In with</h5>
-										</div>
-										<div>
-											<button type="button" class="btn btn-primary btn-icon waves-effect waves-light"><i class="ri-facebook-fill fs-16"></i></button>
-											<button type="button" class="btn btn-danger btn-icon waves-effect waves-light"><i class="ri-google-fill fs-16"></i></button>
-											<button type="button" class="btn btn-dark btn-icon waves-effect waves-light"><i class="ri-github-fill fs-16"></i></button>
-											<button type="button" class="btn btn-info btn-icon waves-effect waves-light"><i class="ri-twitter-fill fs-16"></i></button>
-										</div>
-									</div>
-								</form>
-							</div>
-						</div>
-						<!-- end card body -->
-					</div>
-					<!-- end card -->
+        /* Card */
+        .auth-card {
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(5px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, .25);
+            overflow: hidden;
+        }
 
-					<div class="mt-4 text-center">
-						<p class="mb-0">Don't have an account ? <a href="{{ route('register') }}" class="fw-semibold text-primary text-decoration-underline"> Signup </a> </p>
-					</div>
+        .brand-mini {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: .5rem;
+            color: #fff;
+            text-shadow: 0 2px 6px rgba(0, 0, 0, .25);
+        }
 
-				</div>
-			</div>
-			<!-- end row -->
-		</div>
-		<!-- end container -->
-	</div>
-	<!-- end auth page content -->
+        .brand-mini img {
+            height: 56px;
+        }
 
-	<!-- footer -->
-	<footer class="footer">
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-12">
-					<div class="text-center">
-						<p class="mb-0 text-muted">&copy; <script>
-								document.write(new Date().getFullYear())
-							</script> Velzon. Crafted with <i class="mdi mdi-heart text-danger"></i> by Themesbrand</p>
-					</div>
-				</div>
-			</div>
-		</div>
-	</footer>
-	<!-- end Footer -->
-</div>
+        .brand-mini .title {
+            font-weight: 700;
+            letter-spacing: .3px;
+            font-size: 1.05rem;
+        }
+
+        .btn-forest {
+            --bs-btn-bg: var(--forest-600);
+            --bs-btn-border-color: var(--forest-600);
+            --bs-btn-hover-bg: var(--forest-700);
+            --bs-btn-hover-border-color: var(--forest-700);
+            --bs-btn-active-bg: var(--forest-700);
+            --bs-btn-active-border-color: var(--forest-700);
+            --bs-btn-disabled-bg: var(--forest-400);
+            --bs-btn-disabled-border-color: var(--forest-400);
+            color: #fff;
+            transition: all 0.3s ease;
+        }
+
+        .link-forest {
+            color: var(--forest-600);
+            text-decoration: none;
+        }
+
+        .link-forest:hover {
+            color: var(--forest-700);
+            text-decoration: underline;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .form-check-label {
+            color: #fff;
+        }
+
+        .is-invalid+.invalid-feedback {
+            display: block;
+        }
+
+        /* Subtle wood grain for card header strip */
+        .wood-.strip {
+            height: 6px;
+            background: linear-gradient(90deg, #5d4037, #6d4c41, #4e342e);
+        }
+
+        /* Footer */
+        .site-footer {
+            color: #fff;
+        }
+
+        .site-footer a {
+            color: #9fe6b6;
+            text-decoration: none;
+        }
+
+        .site-footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Small leaf bullets */
+        .leaf-bullet::before {
+            content: "\f1bb";
+            /* ri-leaf-fill */
+            font-family: 'remixicon';
+            margin-right: .5rem;
+            color: #a5d6a7;
+        }
+
+        /* Responsive tweaks */
+        @media (max-width: 576px) {
+            .forest-hero {
+                min-height: 180px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="forest-hero d-flex align-items-end">
+        <div class="container pb-4">
+            <div class="brand-mini">
+                <img src="{{ URL::asset('assets/img/logoIHM.png') }}" alt="IHM">
+                <h1>Itci Hutani Manunggal</h1>
+            </div>
+            {{-- <ul class="mt-3 ps-0 list-unstyled d-flex gap-3 small mb-0 text-light">
+        <li class="leaf-bullet">Sustainable</li>
+        <li class="leaf-bullet">Efficient</li>
+        <li class="leaf-bullet">Secure</li>
+      </ul> --}}
+        </div>
+    </header>
+
+    <main class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6 col-xl-5">
+                <div class="card auth-card">
+                    {{-- <div class="wood-strip"></div> --}}
+                    <div class="card-body p-4 p-lg-5">
+                        <div class="text-center mb-4">
+                            <h4 class="mb-1" style="color: #fff;">Admin Web</h4>
+                            <p class="mb-0" style="color: #eee;">Masuk untuk melanjutkan ke sistem Web IHM.</p>
+                        </div>
+
+                        @if (session('success'))
+                            <div class="alert alert-success">
+                                {{ session('success') }}
+                            </div>
+                        @endif
+
+                        @if ($errors->any())
+                            <div class="alert alert-danger">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+
+                        <form action="{{ route('login') }}" method="POST" novalidate>
+                            @csrf
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email / Username</label>
+                                <input type="text" id="email" name="email"
+                                    class="form-control @error('email') is-invalid @enderror"
+                                    {{-- value="{{ old('email', 'admin@mail.com') }}" placeholder="you@company.com" --}}
+                                    autofocus>
+                                @error('email')
+                                    <div class="invalid-feedback"><strong>{{ $message }}</strong></div>
+                                @enderror
+                            </div>
+
+                            <div class="mb-2">
+                                <label for="password-input" class="form-label">Password</label>
+                                <div class="position-relative">
+                                    <input type="password" id="password-input" name="password"
+                                        class="form-control pe-5 @error('password') is-invalid @enderror">
+                                    <button type="button"
+                                        class="btn position-absolute top-0 end-0 h-100 px-3 text-muted"
+                                        id="togglePassword" aria-label="Toggle password visibility">
+                                        <i class="ri-eye-fill" id="eyeIcon"></i>
+                                    </button>
+                                    @error('password')
+                                        <div class="invalid-feedback"><strong>{{ $message }}</strong></div>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="remember" name="remember">
+                                    <label class="form-check-label" for="remember">Ingat saya</label>
+                                </div>
+                                {{-- <a href="{{ route('password.request') }}" class="link-forest">Lupa password?</a> --}}
+                            </div>
+
+                            <button class="btn btn-forest w-100 py-2" type="submit">
+                                <i class="ri-login-circle-line me-1"></i> Sign In
+                            </button>
+                        </form>
+
+                        <p class="text-center mt-4 mb-0" style="color: #eee;">Don't have an account? <a href="{{ route('register') }}" class="link-forest">Register</a></p>
+                    </div>
+                </div>
+
+                <p class="text-center mt-4 site-footer small">
+                    &copy;
+                    <script>
+                        document.write(new Date().getFullYear())
+                    </script> System Development KF
+                </p>
+            </div>
+        </div>
+    </main>
+
+    {{-- Optional: partikel daun halus (kalau punya file JS sendiri, boleh lepas ini) --}}
+    <script>
+        // Toggle password
+        document.addEventListener('DOMContentLoaded', function() {
+            const input = document.getElementById('password-input');
+            const btn = document.getElementById('togglePassword');
+            const icon = document.getElementById('eyeIcon');
+            if (btn && input) {
+                btn.addEventListener('click', function() {
+                    const isPwd = input.getAttribute('type') === 'password';
+                    input.setAttribute('type', isPwd ? 'text' : 'password');
+                    icon.className = isPwd ? 'ri-eye-off-fill' : 'ri-eye-fill';
+                });
+            }
+        });
+    </script>
+
+    {{-- Bootstrap JS --}}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

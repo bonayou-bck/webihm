@@ -25,11 +25,9 @@ use Illuminate\Support\Facades\Auth;
 |
 */
 
-Route::get('/', function () {
-    return redirect()->route('dashboard');
-});
+Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
-Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard')->middleware('auth');
+
 Route::view('/tentang', 'pages.tentang')->name('pages.tentang');
 Route::view('/berita', 'pages.berita')->name('pages.berita');
 Route::view('/keberlanjutan', 'pages.keberlanjutan')->name('pages.keberlanjutan');
@@ -39,8 +37,7 @@ Route::get('/keberlanjutan', [DashboardController::class, 'keberlanjutan'])->nam
 Route::get('/berita-detail/{id}', [DashboardController::class, 'beritadetail'])->name('pages.berita-detail');
 Route::get('/fasilitas', [DashboardController::class, 'fasilitas'])->name('pages.fasilitas');
 
-Route::controller(DashboardController::class)->group(function () {
-    Route::get('/dashboard', 'index')->name('dashboard')->middleware('auth'); 
+Route::controller(DashboardController::class)->group(function () { 
     Route::get('/berita', 'berita')->name('berita'); 
 });
 
@@ -83,6 +80,8 @@ Route::middleware('guest')->group(function () {
   Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
   // handle login form submit (AuthenticatesUsers trait)
   Route::post('/login', [LoginController::class, 'login']);
+  Route::get('/register', [\App\Http\Controllers\Auth\RegisterController::class, 'showRegistrationForm'])->name('register');
+  Route::post('/register', [\App\Http\Controllers\Auth\RegisterController::class, 'register']);
 });
 
 // logout route (hanya untuk user login)

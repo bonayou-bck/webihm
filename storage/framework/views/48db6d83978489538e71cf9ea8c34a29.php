@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Login • Itci Hutani Manunggal</title>
+    <title>Login • IHM System</title>
     <link rel="icon" href="<?php echo e(URL::asset('assets/img/logoIHM.png')); ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -27,9 +27,11 @@
         }
 
         body {
-            background:
-                radial-gradient(1200px 500px at 50% -200px, rgba(60, 209, 136, .35), transparent 60%),
-                linear-gradient(180deg, #0a2913 0%, #0f3a1a 35%, #0f2f18 100%);
+            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("<?php echo e(asset('assets/img/bg/bg-14.JPG')); ?>");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            height: 100%;
             color: #1b1b1b;
         }
 
@@ -37,14 +39,12 @@
         .forest-hero {
             position: relative;
             min-height: 220px;
-            background:
-                /* url("<?php echo e(URL::asset('assets/img/bg/bg-14.JPG')); ?>") bottom center / cover no-repeat, */
-                linear-gradient(90deg, #2e7d32, #43a047);
+            background: transparent;
             border-bottom-left-radius: 24px;
             border-bottom-right-radius: 24px;
-            box-shadow: 0 12px 40px rgba(0, 0, 0, .25);
+            box-shadow: none;
         }
-/* <div class="page-title dark-background" style="background-image: url('<?php echo e(asset('assets/img/bg/bg-14.JPG')); ?>');"> */
+
         .forest-hero::after {
             content: "";
             position: absolute;
@@ -57,11 +57,12 @@
 
         /* Card */
         .auth-card {
-            border: 0;
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(5px);
             border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
             box-shadow: 0 20px 60px rgba(0, 0, 0, .25);
             overflow: hidden;
-            background: #ffffff;
         }
 
         .brand-mini {
@@ -93,6 +94,7 @@
             --bs-btn-disabled-bg: var(--forest-400);
             --bs-btn-disabled-border-color: var(--forest-400);
             color: #fff;
+            transition: all 0.3s ease;
         }
 
         .link-forest {
@@ -107,6 +109,11 @@
 
         .form-label {
             font-weight: 600;
+            color: #fff;
+        }
+
+        .form-check-label {
+            color: #fff;
         }
 
         .is-invalid+.invalid-feedback {
@@ -121,7 +128,7 @@
 
         /* Footer */
         .site-footer {
-            color: #cfe7d1;
+            color: #fff;
         }
 
         .site-footer a {
@@ -166,11 +173,11 @@
         <div class="row justify-content-center">
             <div class="col-md-8 col-lg-6 col-xl-5">
                 <div class="card auth-card">
-                    <div class="wood-strip"></div>
+                    
                     <div class="card-body p-4 p-lg-5">
                         <div class="text-center mb-4">
-                            <h4 class="mb-1" style="color: var(--forest-700);">Welcome Back</h4>
-                            <p class="text-muted mb-0">Masuk untuk melanjutkan ke sistem.</p>
+                            <h4 class="mb-1" style="color: #fff;">Admin Web</h4>
+                            <p class="mb-0" style="color: #eee;">Masuk untuk melanjutkan ke sistem Web IHM.</p>
                         </div>
 
                         <form action="<?php echo e(route('login')); ?>" method="POST" novalidate>
@@ -186,7 +193,7 @@ $message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>"
-                                    value="<?php echo e(old('email', 'admin@mail.com')); ?>" placeholder="you@company.com"
+                                    
                                     autofocus>
                                 <?php $__errorArgs = ['email'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
@@ -211,8 +218,7 @@ if (isset($message)) { $__messageOriginal = $message; }
 $message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
-unset($__errorArgs, $__bag); ?>"
-                                        placeholder="••••••••" value="123">
+unset($__errorArgs, $__bag); ?>">
                                     <button type="button"
                                         class="btn position-absolute top-0 end-0 h-100 px-3 text-muted"
                                         id="togglePassword" aria-label="Toggle password visibility">
@@ -243,6 +249,8 @@ unset($__errorArgs, $__bag); ?>
                                 <i class="ri-login-circle-line me-1"></i> Sign In
                             </button>
                         </form>
+
+                        <p class="text-center mt-4 mb-0" style="color: #eee;">Don't have an account? <a href="<?php echo e(route('register')); ?>" class="link-forest">Register</a></p>
                     </div>
                 </div>
 
