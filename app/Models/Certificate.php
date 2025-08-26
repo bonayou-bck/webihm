@@ -13,14 +13,14 @@ class Certificate extends Model
     protected $table = 'certificate';
 
     protected $fillable = [
-        'admin_id',
+        // 'admin_id',
         'name_id',
         'description_id',
-        'name_en',
-        'description_en',
+        // 'name_en',
+        // 'description_en',
         'logo',
         'showcase',
-        'is_active'
+        // 'is_active'
     ];
 
     protected $hidden = [];

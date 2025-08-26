@@ -15,14 +15,14 @@ return new class extends Migration
     {
         Schema::create('certificate', function (Blueprint $table) {
             $table->bigInteger('id', true);
-            $table->bigInteger('admin_id')->nullable();
+            // $table->bigInteger('admin_id')->nullable();
             $table->string('name_id')->nullable();
-            $table->string('name_en');
+            // $table->string('name_en');
             $table->text('description_id')->nullable();
-            $table->text('description_en');
+            // $table->text('description_en');
             $table->text('logo')->nullable();
             $table->boolean('showcase')->nullable()->default(false);
-            $table->boolean('is_active')->nullable()->default(true);
+            // $table->boolean('is_active')->nullable()->default(true);
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrentOnUpdate()->useCurrent();
         });

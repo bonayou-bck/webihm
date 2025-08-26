@@ -32,7 +32,7 @@ class SertifikatController extends Controller
     {
         // Validasi minimal
         $data = $request->validate([
-            'admin_id'        => 'nullable|integer',
+            // 'admin_id'        => 'nullable|integer',
             'name_id'         => 'required|string|max:255',
             'description_id'  => 'nullable|string',
             'name_en'         => 'nullable|string|max:255',
@@ -91,12 +91,12 @@ class SertifikatController extends Controller
     public function update(Request $request, $id)
     {
         $cf = Certificate::findOrFail($id);
-        $cf->admin_id        = $request->admin_id;
+        // $cf->admin_id        = $request->admin_id;
         $cf->name_id         = $request->name_id;
         $cf->description_id  = $request->description_id;
-        $cf->name_en         = $request->name_en;
-        $cf->description_en  = $request->description_en;
-        $cf->is_active       = $request->is_active ?? 0;
+        // $cf->name_en         = $request->name_en;
+        // $cf->description_en  = $request->description_en;
+        // $cf->is_active       = $request->is_active ?? 0;
 
         // Logo
         if ($request->hasFile('logo')) {

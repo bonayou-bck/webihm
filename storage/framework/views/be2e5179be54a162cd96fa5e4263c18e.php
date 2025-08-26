@@ -24,7 +24,7 @@
                             <th style="width:36px">#</th>
                             <th>Judul</th>
                             <th>slug</th>
-                            <th>Status</th>
+                            
                             <th>Updated</th>
                             <th style="width:140px">Aksi</th>
                         </tr>
@@ -35,13 +35,13 @@
                                 <td><?php echo e($i + 1); ?></td>
                                 <td>
                                     <div class="fw-semibold"><?php echo e($row->title_id); ?></div>
-                                    <div class="text-muted small"><?php echo e($row->title_en); ?></div>
+                                    
                                 </td>
                                 <td>
                                     <div class="fw-semibold"><?php echo e($row->slug_id); ?></div>
-                                    <div class="text-muted small"><?php echo e($row->slug_en); ?></div>
+                                    
                                 </td>
-                                <td><span class="badge badge-status bg-success">Published</span></td>
+                                
                                 <td class="small text-muted"><?php echo e($row->updated_at?->format('d M Y H:i')); ?></td>
                                 <td>
                                     <div class="form-button-action">
@@ -82,40 +82,25 @@
 
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label class="form-label">Judul (Indonesia)</label>
+                        <label class="form-label">Judul</label>
                         <input type="text" name="title_id" class="form-control">
                     </div>
+                    
+                    
                     <div class="mb-3">
-                        <label class="form-label">Title (English)</label>
-                        <input type="text" name="title_en" class="form-control">
+                        <label class="form-label">Slug</label>
+                        <input type="text" name="slug_id" class="form-control">
                     </div>
                     
                     <div class="mb-3">
-                        <label class="form-label">Slug (Indonesia)</label>
-                        <input type="text" name="slug_id" class="form-control">
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Slug (English)</label>
-                        <input type="text" name="slug_en" class="form-control">
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Konten (Indonesia)</label>
+                        <label class="form-label">Konten</label>
                         <textarea name="content_id" rows="6" class="form-control"></textarea>
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label">Content (English)</label>
-                        <textarea name="content_en" rows="6" class="form-control"></textarea>
-                    </div>
+                    
 
-                    <div class="row g-3">
-                        <div class="col-md-6">
-                            <label class="form-label">Status</label>
-                            <select name="status" class="form-select">
-                                <option value="published">Published</option>
-                                <option value="draft">Draft</option>
-                            </select>
-                        </div>
-                        <div class="col-md-6">
+                    <div class="row">
+                        
+                        <div class="col-12">
                             <label class="form-label">Cover</label>
                             <input type="file" name="cover" class="form-control" accept="image/*">
                             <div class="form-text">File akan disimpan ke <code>public/upload/berita</code></div>
@@ -148,41 +133,26 @@
                     <input type="hidden" name="id" id="edit_id">
 
                     <div class="mb-3">
-                        <label class="form-label">Judul (Indonesia)</label>
+                        <label class="form-label">Judul</label>
                         <input type="text" name="title_id" id="edit_title_id" class="form-control">
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label">Title (English)</label>
-                        <input type="text" name="title_en" id="edit_title_en" class="form-control">
-                    </div>
+                    
 
                     
                     <div class="mb-3">
-                        <label class="form-label">Slug (Indonesia)</label>
+                        <label class="form-label">Slug</label>
                         <input type="text" name="slug_id" id="edit_slug_id" class="form-control">
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label">Slug (English)</label>
-                        <input type="text" name="slug_en" id="edit_slug_en" class="form-control">
-                    </div>
+                    
 
                     <div class="mb-3">
-                        <label class="form-label">Konten (Indonesia)</label>
+                        <label class="form-label">Konten</label>
                         <textarea name="content_id" id="edit_content_id" rows="6" class="form-control"></textarea>
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label">Content (English)</label>
-                        <textarea name="content_en" id="edit_content_en" rows="6" class="form-control"></textarea>
-                    </div>
+                    
 
                     <div class="row g-3">
-                        <div class="col-md-6">
-                            <label class="form-label">Status</label>
-                            <select name="status" id="edit_status" class="form-select">
-                                <option value="published">Published</option>
-                                <option value="draft">Draft</option>
-                            </select>
-                        </div>
+                        
                         <div class="col-md-6">
                             <label class="form-label">Ganti Cover (opsional)</label>
                             <input type="file" name="cover" class="form-control" accept="image/*">
@@ -242,7 +212,7 @@
                             'X-Requested-With': 'XMLHttpRequest'
                         }
                     });
-                    if (!res.ok) throw new Error('Gagal mengambil data (HTTP ' + res.status + ')');
+                    // if (!res.ok) throw new Error('Gagal mengambil data (HTTP ' + res.status + ')');
                     const row = await res.json();
 
                     // Set action form PUT /admin/berita/{id}
@@ -257,7 +227,7 @@
                     document.getElementById('edit_slug_en').value = row.slug_en ?? '';
                     document.getElementById('edit_content_id').value = row.content_id ?? '';
                     document.getElementById('edit_content_en').value = row.content_en ?? '';
-                    document.getElementById('edit_status').value = row.status ?? 'published';
+                    // document.getElementById('edit_status').value = row.status ?? 'published';
 
                     // Info + preview cover
                     const info = document.getElementById('edit_cover_info');
@@ -297,6 +267,40 @@
                 const form = document.getElementById('deleteForm');
                 form.action = `<?php echo e(url('admin/berita')); ?>/${id}`;
                 form.submit();
+            });
+            // RESET Modal Create saat ditutup
+            document.getElementById('modalCreate')?.addEventListener('hidden.bs.modal', function() {
+                const f = this.querySelector('form');
+                if (f) {
+                    f.reset(); // kosongkan input termasuk file
+                    f.classList.remove('was-validated');
+                }
+                // bersihkan preview
+                const cover = document.getElementById('createCoverPreview');
+                const gal = document.getElementById('createPreview');
+                if (cover) cover.innerHTML = '';
+                if (gal) gal.innerHTML = '';
+            });
+
+            // RESET Modal Edit saat ditutup
+            document.getElementById('modalEdit')?.addEventListener('hidden.bs.modal', function() {
+                const f = document.getElementById('editForm');
+                if (f) {
+                    f.reset();
+                    f.classList.remove('was-validated');
+                    // kosongkan action kalau mau aman
+                    // f.action = '';
+                }
+                // bersihkan preview & state hapus
+                const cover = document.getElementById('editCoverPreview');
+                const galNew = document.getElementById('editPreview');
+                const galOld = document.getElementById('existingWrap');
+                if (cover) cover.innerHTML = '';
+                if (galNew) galNew.innerHTML = '';
+                if (galOld) galOld.innerHTML = '';
+                const delIds = document.getElementById('delete_ids');
+                if (delIds) delIds.value = '';
+                window.fasilitasDelSet = new Set();
             });
         });
     </script>

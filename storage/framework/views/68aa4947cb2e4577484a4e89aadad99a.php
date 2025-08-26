@@ -54,8 +54,10 @@
                                             title="Edit" class="btn btn-link btn-primary btn-lg">
                                             <i class="fa fa-edit"></i>
                                         </button>
-                                        <button type="button" data-id="<?php echo e($row->id); ?>" data-bs-toggle="tooltip"
-                                            title="Remove" class="btn btn-link btn-danger btn-delete">
+                                        <button type="button" data-id="<?php echo e($row->id); ?>" data-bs-toggle="modal"
+                                            data-bs-target="#deleteConfirmationModal"
+                                            data-url="<?php echo e(url('admin/fasilitas')); ?>/<?php echo e($row->id); ?>" title="Remove"
+                                            class="btn btn-link btn-danger">
                                             <i class="fa fa-times"></i>
                                         </button>
                                     </div>
@@ -68,11 +70,6 @@
                         <?php endif; ?>
                     </tbody>
                 </table>
-                <form id="deleteForm" method="POST" style="display:none;">
-                    <?php echo csrf_field(); ?>
-                    <?php echo method_field('DELETE'); ?>
-                </form>
-
             </div>
         </div>
     </div>
@@ -120,7 +117,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
                     <button class="btn btn-primary" type="submit">Simpan</button>
                 </div>
             </form>
@@ -176,7 +174,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                    
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
                     <button class="btn btn-primary" type="submit">Update</button>
                 </div>
             </form>
@@ -438,16 +437,39 @@
                 }
             });
 
-            // Delegated delete handler so it still works after DataTables redraws
-            document.addEventListener('click', function(ev) {
-                const btn = ev.target.closest('.btn-delete');
-                if (!btn) return;
-                const id = btn.getAttribute('data-id');
-                if (!id) return;
-                if (!confirm('Yakin hapus data ini beserta gambarnya?')) return;
-                const form = document.getElementById('deleteForm');
-                form.action = `<?php echo e(url('admin/fasilitas')); ?>/${id}`;
-                form.submit();
+            // RESET Modal Create saat ditutup
+            document.getElementById('modalCreate')?.addEventListener('hidden.bs.modal', function() {
+                const f = this.querySelector('form');
+                if (f) {
+                    f.reset(); // kosongkan input termasuk file
+                    f.classList.remove('was-validated');
+                }
+                // bersihkan preview
+                const cover = document.getElementById('createCoverPreview');
+                const gal = document.getElementById('createPreview');
+                if (cover) cover.innerHTML = '';
+                if (gal) gal.innerHTML = '';
+            });
+
+            // RESET Modal Edit saat ditutup
+            document.getElementById('modalEdit')?.addEventListener('hidden.bs.modal', function() {
+                const f = document.getElementById('editForm');
+                if (f) {
+                    f.reset();
+                    f.classList.remove('was-validated');
+                    // kosongkan action kalau mau aman
+                    // f.action = '';
+                }
+                // bersihkan preview & state hapus
+                const cover = document.getElementById('editCoverPreview');
+                const galNew = document.getElementById('editPreview');
+                const galOld = document.getElementById('existingWrap');
+                if (cover) cover.innerHTML = '';
+                if (galNew) galNew.innerHTML = '';
+                if (galOld) galOld.innerHTML = '';
+                const delIds = document.getElementById('delete_ids');
+                if (delIds) delIds.value = '';
+                window.fasilitasDelSet = new Set();
             });
         </script>
     <?php $__env->stopPush(); ?>

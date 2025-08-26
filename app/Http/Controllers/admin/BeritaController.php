@@ -33,11 +33,11 @@ class BeritaController extends Controller
         // Validasi minimal
         $data = $request->validate([
             'title_id'   => 'required|string|max:255',
-            'title_en'   => 'nullable|string|max:255',
+            // 'title_en'   => 'nullable|string|max:255',
             'slug_id'       => 'nullable|string|max:255',
-            'slug_en'       => 'nullable|string|max:255',
+            // 'slug_en'       => 'nullable|string|max:255',
             'content_id' => 'required|string',
-            'content_en' => 'nullable|string',
+            // 'content_en' => 'nullable|string',
             'status'     => 'nullable|string|max:50', // contoh: published/draft
             'cover'      => 'nullable|image|max:2048', // jpg/png/webp, dll
         ]);
@@ -89,18 +89,18 @@ class BeritaController extends Controller
     $blog = Blog::findOrFail($id);
 
     $blog->title_id   = $request->title_id;   // bebas kosong
-    $blog->title_en   = $request->title_en;
+    // $blog->title_en   = $request->title_en;
     $blog->content_id = $request->content_id;
-    $blog->content_en = $request->content_en;
+    // $blog->content_en = $request->content_en;
     $blog->status     = $request->status;
 
     // JANGAN timpa slug kalau input kosong
     if ($request->filled('slug_id')) {
         $blog->slug_id = $request->slug_id;
     }
-    if ($request->filled('slug_en')) {
-        $blog->slug_en = $request->slug_en;
-    }
+    // if ($request->filled('slug_en')) {
+    //     $blog->slug_en = $request->slug_en;
+    // }
 
     if ($request->hasFile('cover')) {
         if ($blog->cover && file_exists(public_path($blog->cover))) {
