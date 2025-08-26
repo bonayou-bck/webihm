@@ -25,12 +25,9 @@
                         <tr>
                             <th style="width:36px">#</th>
                             <th>Nama</th>
-                            {{-- <th>Nama (EN)</th> --}}
                             <th>Deskripsi (ID)</th>
-                            {{-- <th>Deskripsi (EN)</th> --}}
                             <th>Logo</th>
                             <th>Showcase</th>
-                            {{-- <th>Aktif</th> --}}
                             <th>Updated</th>
                             <th style="width:140px">Aksi</th>
                         </tr>
@@ -40,9 +37,7 @@
                             <tr data-id="{{ $row->id }}">
                                 <td>{{ $i + 1 }}</td>
                                 <td>{{ $row->name_id }}</td>
-                                {{-- <td>{{ $row->name_en }}</td> --}}
                                 <td>{{ $row->description_id }}</td>
-                                {{-- <td>{{ $row->description_en }}</td> --}}
                                 <td>
                                     @if ($row->logo)
                                         <img src="/{{ $row->logo }}" alt="Logo"
@@ -55,10 +50,6 @@
                                             style="max-width:60px;max-height:60px;">
                                     @endif
                                 </td>
-                                {{-- <td>
-                                    <span
-                                        class="badge {{ $row->is_active ? 'bg-success' : 'bg-secondary' }}">{{ $row->is_active ? 'Aktif' : 'Nonaktif' }}</span>
-                                </td> --}}
                                 <td class="small text-muted">{{ $row->updated_at?->format('d M Y H:i') }}</td>
                                 <td>
                                     <div class="form-button-action">
@@ -94,26 +85,14 @@
                 </div>
 
                 <div class="modal-body">
-                    {{-- <div class="mb-3">
-                        <label class="form-label">Admin ID</label>
-                        <input type="number" name="admin_id" class="form-control">
-                    </div> --}}
                     <div class="mb-3">
                         <label class="form-label">Nama</label>
                         <input type="text" name="name_id" class="form-control">
                     </div>
-                    {{-- <div class="mb-3">
-                        <label class="form-label">Nama</label>
-                        <input type="text" name="name_en" class="form-control">
-                    </div> --}}
                     <div class="mb-3">
                         <label class="form-label">Deskripsi</label>
                         <textarea name="description_id" rows="4" class="form-control"></textarea>
                     </div>
-                    {{-- <div class="mb-3">
-                        <label class="form-label">Deskripsi</label>
-                        <textarea name="description_en" rows="4" class="form-control"></textarea>
-                    </div> --}}
                     <div class="row g-3">
                         <div class="col-md-6">
                             <label class="form-label">Logo</label>
@@ -126,13 +105,6 @@
                             <div class="form-text">File akan disimpan ke <code>public/upload/sertifikat</code></div>
                         </div>
                     </div>
-                    {{-- <div class="mb-3 mt-3">
-                        <label class="form-label">Status Aktif</label>
-                        <select name="is_active" class="form-select">
-                            <option value="1">Aktif</option>
-                            <option value="0">Nonaktif</option>
-                        </select>
-                    </div> --}}
                 </div>
 
                 <div class="modal-footer">
@@ -158,27 +130,14 @@
 
                 <div class="modal-body">
                     <input type="hidden" name="id" id="edit_id">
-
-                    {{-- <div class="mb-3">
-                        <label class="form-label">Admin ID</label>
-                        <input type="number" name="admin_id" id="edit_admin_id" class="form-control">
-                    </div> --}}
                     <div class="mb-3">
                         <label class="form-label">Nama</label>
                         <input type="text" name="name_id" id="edit_name_id" class="form-control">
                     </div>
-                    {{-- <div class="mb-3">
-                        <label class="form-label">Nama (English)</label>
-                        <input type="text" name="name_en" id="edit_name_en" class="form-control">
-                    </div> --}}
                     <div class="mb-3">
                         <label class="form-label">Deskripsi</label>
                         <textarea name="description_id" id="edit_description_id" rows="4" class="form-control"></textarea>
                     </div>
-                    {{-- <div class="mb-3">
-                        <label class="form-label">Deskripsi (English)</label>
-                        <textarea name="description_en" id="edit_description_en" rows="4" class="form-control"></textarea>
-                    </div> --}}
                     <div class="row g-3">
                         <div class="col-md-6">
                             <label class="form-label">Ganti Logo (opsional)</label>
@@ -199,13 +158,6 @@
                             </div>
                         </div>
                     </div>
-                    {{-- <div class="mb-3 mt-3">
-                        <label class="form-label">Status Aktif</label>
-                        <select name="is_active" id="edit_is_active" class="form-select">
-                            <option value="1">Aktif</option>
-                            <option value="0">Nonaktif</option>
-                        </select>
-                    </div> --}}
                 </div>
 
                 <div class="modal-footer">
@@ -264,12 +216,8 @@
 
                     // Isi field termasuk SLUG
                     document.getElementById('edit_id').value = row.id ?? '';
-                    // document.getElementById('edit_admin_id').value = row.admin_id ?? '';
                     document.getElementById('edit_name_id').value = row.name_id ?? '';
-                    // document.getElementById('edit_name_en').value = row.name_en ?? '';
                     document.getElementById('edit_description_id').value = row.description_id ?? '';
-                    // document.getElementById('edit_description_en').value = row.description_en ?? '';
-                    // document.getElementById('edit_is_active').value = row.is_active ?? '0';
 
                     // Info + preview logo
                     const logoInfo = document.getElementById('edit_logo_info');

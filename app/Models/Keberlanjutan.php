@@ -13,7 +13,6 @@ class Keberlanjutan extends Model
     protected $table = 'keberlanjutan';
 
     protected $fillable = [
-        // 'category_id',
         'title',
         'slug',
         'content',

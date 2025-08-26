@@ -15,11 +15,8 @@ class Blog extends Model
     protected $fillable = [
         'category_id',
         'title_id',
-        // 'title_en',
         'slug_id',
-        // 'slug_en',
         'content_id',
-        // 'content_en',
         'cover',
         'created_by',
         'updated_by',

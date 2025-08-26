@@ -26,7 +26,6 @@
                             <th style="width:36px">#</th>
                             <th>Judul</th>
                             <th>slug</th>
-                            {{-- <th>Status</th> --}}
                             <th>Updated</th>
                             <th style="width:140px">Aksi</th>
                         </tr>
@@ -37,13 +36,10 @@
                                 <td>{{ $i + 1 }}</td>
                                 <td>
                                     <div class="fw-semibold">{{ $row->title_id }}</div>
-                                    {{-- <div class="text-muted small">{{ $row->title_en }}</div> --}}
                                 </td>
                                 <td>
                                     <div class="fw-semibold">{{ $row->slug_id }}</div>
-                                    {{-- <div class="text-muted small">{{ $row->slug_en }}</div> --}}
                                 </td>
-                                {{-- <td><span class="badge badge-status bg-success">Published</span></td> --}}
                                 <td class="small text-muted">{{ $row->updated_at?->format('d M Y H:i') }}</td>
                                 <td>
                                     <div class="form-button-action">
@@ -87,36 +83,16 @@
                         <label class="form-label">Judul</label>
                         <input type="text" name="title_id" class="form-control">
                     </div>
-                    {{-- <div class="mb-3">
-                        <label class="form-label">Title (English)</label>
-                        <input type="text" name="title_en" class="form-control">
-                    </div> --}}
                     {{-- slug disediakan manual sesuai permintaan (tidak otomatis) --}}
                     <div class="mb-3">
                         <label class="form-label">Slug</label>
                         <input type="text" name="slug_id" class="form-control">
                     </div>
-                    {{-- <div class="mb-3">
-                        <label class="form-label">Slug (English)</label>
-                        <input type="text" name="slug_en" class="form-control">
-                    </div> --}}
                     <div class="mb-3">
                         <label class="form-label">Konten</label>
                         <textarea name="content_id" rows="6" class="form-control"></textarea>
                     </div>
-                    {{-- <div class="mb-3">
-                        <label class="form-label">Content (English)</label>
-                        <textarea name="content_en" rows="6" class="form-control"></textarea>
-                    </div> --}}
-
                     <div class="row">
-                        {{-- <div class="col-md-6">
-                            <label class="form-label">Status</label>
-                            <select name="status" class="form-select">
-                                <option value="published">Published</option>
-                                <option value="draft">Draft</option>
-                            </select>
-                        </div> --}}
                         <div class="col-12">
                             <label class="form-label">Cover</label>
                             <input type="file" name="cover" class="form-control" accept="image/*">
@@ -153,38 +129,16 @@
                         <label class="form-label">Judul</label>
                         <input type="text" name="title_id" id="edit_title_id" class="form-control">
                     </div>
-                    {{-- <div class="mb-3">
-                        <label class="form-label">Title (English)</label>
-                        <input type="text" name="title_en" id="edit_title_en" class="form-control">
-                    </div> --}}
-
                     {{-- FIELD SLUG DITAMBAHKAN --}}
                     <div class="mb-3">
                         <label class="form-label">Slug</label>
                         <input type="text" name="slug_id" id="edit_slug_id" class="form-control">
                     </div>
-                    {{-- <div class="mb-3">
-                        <label class="form-label">Slug (English)</label>
-                        <input type="text" name="slug_en" id="edit_slug_en" class="form-control">
-                    </div> --}}
-
                     <div class="mb-3">
                         <label class="form-label">Konten</label>
                         <textarea name="content_id" id="edit_content_id" rows="6" class="form-control"></textarea>
                     </div>
-                    {{-- <div class="mb-3">
-                        <label class="form-label">Content (English)</label>
-                        <textarea name="content_en" id="edit_content_en" rows="6" class="form-control"></textarea>
-                    </div> --}}
-
                     <div class="row g-3">
-                        {{-- <div class="col-md-6">
-                            <label class="form-label">Status</label>
-                            <select name="status" id="edit_status" class="form-select">
-                                <option value="published">Published</option>
-                                <option value="draft">Draft</option>
-                            </select>
-                        </div> --}}
                         <div class="col-md-6">
                             <label class="form-label">Ganti Cover (opsional)</label>
                             <input type="file" name="cover" class="form-control" accept="image/*">

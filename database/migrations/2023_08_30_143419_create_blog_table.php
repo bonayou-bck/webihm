@@ -17,11 +17,8 @@ return new class extends Migration
             $table->bigInteger('id', true);
             $table->bigInteger('category_id')->nullable()->index('f_category_id');
             $table->string('title_id')->nullable();
-            // $table->string('title_en')->nullable();
             $table->string('slug_id')->nullable();
-            // $table->string('slug_en')->nullable();
             $table->longText('content_id')->nullable();
-            // $table->longText('content_en')->nullable();
             $table->text('cover')->nullable();
             $table->bigInteger('created_by')->nullable();
             $table->bigInteger('updated_by')->nullable();

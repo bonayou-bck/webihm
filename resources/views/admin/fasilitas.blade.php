@@ -118,7 +118,6 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    {{-- <button class="btn btn-secondary" data-bs-dismiss="modal">Batal</button> --}}
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
                     <button class="btn btn-primary" type="submit">Simpan</button>
                 </div>
@@ -175,7 +174,6 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    {{-- <button class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button> --}}
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
                     <button class="btn btn-primary" type="submit">Update</button>
                 </div>

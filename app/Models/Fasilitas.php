@@ -13,7 +13,6 @@ class Fasilitas extends Model
     protected $table = 'fasilitas';
 
     protected $fillable = [
-        // 'category_id',
         'title',
         'slug',
         'content',
