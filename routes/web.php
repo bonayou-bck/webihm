@@ -42,7 +42,7 @@ Route::controller(DashboardController::class)->group(function () {
 });
 
 Route::prefix('admin')->name('admin.')->middleware(['auth','is_admin'])->group(function () {
-  Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
+  Route::get('/', [AdminController::class, 'index'])->name('dashboard');
 
   //berita resource routes
   Route::get('/berita', [BeritaController::class, 'index'])->name('berita');

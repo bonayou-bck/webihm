@@ -24,7 +24,6 @@
                             <th style="width:36px">#</th>
                             <th>Judul</th>
                             <th>slug</th>
-                            
                             <th>Updated</th>
                             <th style="width:140px">Aksi</th>
                         </tr>
@@ -35,13 +34,10 @@
                                 <td><?php echo e($i + 1); ?></td>
                                 <td>
                                     <div class="fw-semibold"><?php echo e($row->title_id); ?></div>
-                                    
                                 </td>
                                 <td>
                                     <div class="fw-semibold"><?php echo e($row->slug_id); ?></div>
-                                    
                                 </td>
-                                
                                 <td class="small text-muted"><?php echo e($row->updated_at?->format('d M Y H:i')); ?></td>
                                 <td>
                                     <div class="form-button-action">
@@ -86,20 +82,15 @@
                         <input type="text" name="title_id" class="form-control">
                     </div>
                     
-                    
                     <div class="mb-3">
                         <label class="form-label">Slug</label>
                         <input type="text" name="slug_id" class="form-control">
                     </div>
-                    
                     <div class="mb-3">
                         <label class="form-label">Konten</label>
                         <textarea name="content_id" rows="6" class="form-control"></textarea>
                     </div>
-                    
-
                     <div class="row">
-                        
                         <div class="col-12">
                             <label class="form-label">Cover</label>
                             <input type="file" name="cover" class="form-control" accept="image/*">
@@ -137,22 +128,15 @@
                         <input type="text" name="title_id" id="edit_title_id" class="form-control">
                     </div>
                     
-
-                    
                     <div class="mb-3">
                         <label class="form-label">Slug</label>
                         <input type="text" name="slug_id" id="edit_slug_id" class="form-control">
                     </div>
-                    
-
                     <div class="mb-3">
                         <label class="form-label">Konten</label>
                         <textarea name="content_id" id="edit_content_id" rows="6" class="form-control"></textarea>
                     </div>
-                    
-
                     <div class="row g-3">
-                        
                         <div class="col-md-6">
                             <label class="form-label">Ganti Cover (opsional)</label>
                             <input type="file" name="cover" class="form-control" accept="image/*">
