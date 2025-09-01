@@ -48,7 +48,7 @@ class FasilitasController extends Controller
             foreach ($request->file('images') as $i => $image) {
                 $path = $this->moveToPublicUpload($image, 'fasilitas/detail');
                 $caption = $request->captions[$i] ?? null;
-                $fasilitas->Fasilitas_img()->create([
+                $fasilitas->fasilitas_img()->create([
                     'src' => $path,
                     'caption' => $caption,
                     'fasilitas_id' => $fasilitas->id,
@@ -61,7 +61,7 @@ class FasilitasController extends Controller
 
     public function show($id)
     {
-        $row = Fasilitas::with('Fasilitas_img')->findOrFail($id);
+        $row = Fasilitas::with('fasilitas_img')->findOrFail($id);
         // dd($row);
         return response()->json($row);
     }
@@ -107,7 +107,7 @@ class FasilitasController extends Controller
                     ->map('intval')
                     ->all();
                 if (!empty($ids)) {
-                    $imgs = Fasilitas_img::where('id_fasilitas', $fasilitas->id)->whereIn('id', $ids)->get();
+                    $imgs = fasilitas_img::where('id_fasilitas', $fasilitas->id)->whereIn('id', $ids)->get();
                     foreach ($imgs as $img) {
                         $this->deletePublicFileIfExists($img->src);
                         $img->delete();
@@ -119,7 +119,7 @@ class FasilitasController extends Controller
             $captionsExisting = $request->input('captions_existing', []);
             if (is_array($captionsExisting) && count($captionsExisting) > 0) {
                 foreach ($captionsExisting as $imgId => $cap) {
-                    $img = Fasilitas_img::where('id_fasilitas', $fasilitas->id)->where('id', $imgId)->first();
+                    $img = fasilitas_img::where('id_fasilitas', $fasilitas->id)->where('id', $imgId)->first();
                     if ($img) {
                         $img->caption = $cap;
                         $img->save();
@@ -131,7 +131,7 @@ class FasilitasController extends Controller
             Log::info('Fasilitas update files count', ['count' => count($files)]);
 
             if (count($files) > 0) {
-                $existing = Fasilitas_img::where('id_fasilitas', $fasilitas->id)->count();
+                $existing = fasilitas_img::where('id_fasilitas', $fasilitas->id)->count();
                 if ($existing + count($files) > 5) {
                     return redirect()->back()->withInput()->with('error', 'Maksimal total 5 gambar (existing + baru).');
                 }
@@ -143,7 +143,7 @@ class FasilitasController extends Controller
                         continue;
                     }
                     $publicRelative = $this->moveToPublicUpload($file, 'fasilitas/detail');
-                    Fasilitas_img::create([
+                    fasilitas_img::create([
                         'id_fasilitas' => $fasilitas->id,
                         'src' => $publicRelative,
                         'caption' => $newCaptions[$idx] ?? null,
@@ -169,7 +169,7 @@ class FasilitasController extends Controller
 
             $this->deletePublicFileIfExists($keb->cover);
 
-            $imgs = Fasilitas_img::where('id_fasilitas', $keb->id)->get();
+            $imgs = fasilitas_img::where('id_fasilitas', $keb->id)->get();
             foreach ($imgs as $img) {
                 $this->deletePublicFileIfExists($img->src);
                 $img->delete();
