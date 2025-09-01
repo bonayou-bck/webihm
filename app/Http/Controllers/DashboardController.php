@@ -1,10 +1,12 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Models\Blog;
 use App\Models\Certificate;
 use App\Models\Keberlanjutan;
 use App\Models\Fasilitas;
+use App\Models\fasilitas_img;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -25,13 +27,13 @@ class DashboardController extends Controller
             ->limit(3)
             ->orderByDesc('updated_at')
             ->get();
-            // dd($features);
+        // dd($features);
         // Ambil item + gambar (hanya kolom yang perlu)
         $kebs = Keberlanjutan::query()
-            ->select('id','title','slug')
+            ->select('id', 'title', 'slug')
             ->with(['Keberlanjutan_img:id,keberlanjutan_id,src'])
             ->orderByDesc('updated_at')
-            ->limit(5)  
+            ->limit(5)
             ->get();
 
         // Buat daftar filter berdasarkan TITLE
@@ -62,14 +64,15 @@ class DashboardController extends Controller
         }
         // dd($features);
         return view('dashboard', [
-            'kebFilters' => $filters, 
+            'kebFilters' => $filters,
             'kebItems' => $items,
             'past' => $past,
-            'features' => $features,]);
+            'features' => $features,
+        ]);
     }
     public function berita()
     {
-        $b = blog::get();
+        $b = Blog::get();
         // dd($b);
         return view('pages.berita', compact('b'));
     }
@@ -104,7 +107,7 @@ class DashboardController extends Controller
 
     public function fasilitas()
     {
-        $features = \App\Models\Fasilitas::with('fasilitas_img')->get();
+        $features = Fasilitas::with('fasilitas_img')->get();
         // dd($features);
         return view('pages.fasilitas', compact('features'));
     }
