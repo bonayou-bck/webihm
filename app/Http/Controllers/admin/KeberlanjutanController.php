@@ -186,6 +186,19 @@ class KeberlanjutanController extends Controller
             return back()->with('error', 'Gagal menghapus data: '.$e->getMessage());
         }
     }
+    
+    protected function deletePublicFileIfExists(?string $publicPath): void
+    {
+        if (!$publicPath || !str_starts_with($publicPath, 'upload/')) {
+            return;
+        }
+    
+        $fullPath = base_path($publicPath);
+        if (is_file($fullPath)) {
+            @unlink($fullPath);
+        }
+    }
+
 
     protected function uniqueSlug(string $base, ?int $ignoreId = null): string
     {
@@ -210,37 +223,18 @@ class KeberlanjutanController extends Controller
 
     protected function moveToPublicUpload(UploadedFile $file, string $subdir): string
     {
-        $subdir = trim($subdir, '/');
-        $targetDir = public_path('upload' . DIRECTORY_SEPARATOR . $subdir);
-        if (!is_dir($targetDir)) {
-            @mkdir($targetDir, 0775, true);
-        }
+    $subdir = trim($subdir, '/');
+    $targetDir = base_path('upload' . DIRECTORY_SEPARATOR . $subdir);
 
-        $ext = $file->getClientOriginalExtension() ?: 'jpg';
-        $name = (string) Str::uuid() . '.' . $ext;
-        $file->move($targetDir, $name);
-
-        // path relatif untuk disimpan ke DB
-        return 'upload/' . $subdir . '/' . $name;
+    if (!is_dir($targetDir)) {
+        @mkdir($targetDir, 0775, true);
     }
 
-    protected function deletePublicFileIfExists(?string $publicPath): void
-    {
-        if (!$publicPath) {
-            return;
-        }
+    $ext = $file->getClientOriginalExtension() ?: 'jpg';
+    $name = (string) Str::uuid() . '.' . $ext;
 
-        if (str_starts_with($publicPath, 'upload/')) {
-            $relative = substr($publicPath, strlen('upload/'));
-            if (Storage::disk('public')->exists($relative)) {
-                Storage::disk('public')->delete($relative);
-            }
-            return;
-        }
+    $file->move($targetDir, $name);
 
-        $full = public_path($publicPath);
-        if (is_file($full)) {
-            @unlink($full);
-        }
+    return 'upload/' . $subdir . '/' . $name;
     }
 }

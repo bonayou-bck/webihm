@@ -18,7 +18,7 @@ class FasilitasController extends Controller
     {
         $rows = Fasilitas::get();
         // dd($rows);
-        return view('admin.Fasilitas', compact('rows'));
+        return view('admin.fasilitas', compact('rows'));
     }
 
     public function store(Request $request)
@@ -36,7 +36,7 @@ class FasilitasController extends Controller
 
         // Simpan cover
         if ($request->hasFile('cover')) {
-            $coverPath = $this->moveToPublicUpload($request->file('cover'), 'Fasilitas/cover');
+            $coverPath = $this->moveToPublicUpload($request->file('cover'), 'fasilitas/cover');
             $data['cover'] = $coverPath; // hasilnya "upload/Fasilitas/cover/xxxxx.jpg"
         }
 
@@ -46,7 +46,7 @@ class FasilitasController extends Controller
         // Simpan images beserta caption
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $i => $image) {
-                $path = $this->moveToPublicUpload($image, 'Fasilitas/detail');
+                $path = $this->moveToPublicUpload($image, 'fasilitas/detail');
                 $caption = $request->captions[$i] ?? null;
                 $fasilitas->Fasilitas_img()->create([
                     'src' => $path,
@@ -93,7 +93,7 @@ class FasilitasController extends Controller
 
             if ($request->hasFile('cover')) {
                 $this->deletePublicFileIfExists($fasilitas->cover);
-                $fasilitas->cover = $this->moveToPublicUpload($request->file('cover'), 'Fasilitas/cover');
+                $fasilitas->cover = $this->moveToPublicUpload($request->file('cover'), 'fasilitas/cover');
             }
 
             $fasilitas->title = $data['title'];
@@ -142,7 +142,7 @@ class FasilitasController extends Controller
                         Log::warning('Invalid uploaded file skipped');
                         continue;
                     }
-                    $publicRelative = $this->moveToPublicUpload($file, 'Fasilitas/detail');
+                    $publicRelative = $this->moveToPublicUpload($file, 'fasilitas/detail');
                     Fasilitas_img::create([
                         'id_fasilitas' => $fasilitas->id,
                         'src' => $publicRelative,
@@ -210,15 +210,16 @@ class FasilitasController extends Controller
     protected function moveToPublicUpload(UploadedFile $file, string $subdir): string
     {
         $subdir = trim($subdir, '/');
-        $targetDir = public_path('upload' . DIRECTORY_SEPARATOR . $subdir);
+        $targetDir = base_path('upload' . DIRECTORY_SEPARATOR . $subdir);
+    
         if (!is_dir($targetDir)) {
             @mkdir($targetDir, 0775, true);
         }
-
+    
         $ext = $file->getClientOriginalExtension() ?: 'jpg';
         $name = (string) Str::uuid() . '.' . $ext;
         $file->move($targetDir, $name);
-
+    
         // path relatif untuk disimpan ke DB
         return 'upload/' . $subdir . '/' . $name;
     }

@@ -69,7 +69,7 @@ class DashboardController extends Controller
     }
     public function berita()
     {
-        $b = Blog::get();
+        $b = blog::get();
         // dd($b);
         return view('pages.berita', compact('b'));
     }
@@ -104,7 +104,7 @@ class DashboardController extends Controller
 
     public function fasilitas()
     {
-        $features = Fasilitas::with('fasilitas_img')->get();
+        $features = \App\Models\Fasilitas::with('fasilitas_img')->get();
         // dd($features);
         return view('pages.fasilitas', compact('features'));
     }
