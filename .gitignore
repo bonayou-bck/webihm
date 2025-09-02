@@ -3,6 +3,8 @@
 /public/build
 /public/hot
 /public/storage
+/public/upload/
+/upload/
 /storage/*.key
 /vendor
 .env
@@ -19,3 +21,4 @@ yarn-error.log
 /.vscode
 .DS_store
 .htaccess
+public/upload/.DS_Store
