@@ -30,7 +30,7 @@
         </section><!-- /Hero Section -->
 
 
-        
+
         <section id="about" class="about section">
 
             <div class="container">
@@ -41,11 +41,16 @@
                             <p class="lead">Tentang Kami</p>
                             <h2>Perusahaan Yang Bergerak Dibidang Hutan Tanam Dengan Acacia Mangium Dan Eucalyptus Sp.
                             </h2>
-                            <p>Perusahaan yang bergerak dibidang Hutan Tanam dengan Acacia Mangium dan Eucalyptus Sp.
-                                dengan luasan konsesi ±112,868 Ha terletak di Provinsi Kalimantan Timur yang telah
-                                mendapatkan izin berusaha pemanfaatan hutan dengan nomor
-                                SK.630/Menlhk/Setjen/HPL.2/6/2023 yang dikeluarkan oleh Menteri Lingkungan Hidup Dan
-                                Kehutanan pada tanggal 14 Juni 2023.</p>
+                            <p>Perusahaan kami berfokus pada pengelolaan Hutan Tanaman Industri,
+                                dengan komoditas utama berupa Acacia Mangium dan Eucalyptus Sp.
+                                Kegiatan usaha dilaksanakan di atas konsesi dengan luas kurang lebih 112.868 hektar,
+                                yang secara geografis terletak di Provinsi Kalimantan Timur. Legalitas operasional
+                                perusahaan telah diakui melalui Surat Keputusan Menteri Lingkungan Hidup dan Kehutanan
+                                Republik Indonesia Nomor SK.630/Menlhk/Setjen/HPL.2/6/2023, yang diterbitkan pada tanggal 14
+                                Juni 2023.
+                                Dengan landasan hukum tersebut, perusahaan memiliki kewenangan untuk melakukan
+                                pemanfaatan hutan secara terukur dan berkelanjutan, sekaligus mendukung
+                                pengembangan sektor kehutanan nasional.</p>
                             <div class="cta-wrapper">
                                 <a href="{{ url('tentang') }}" class="btn btn-primary">Selengkapnya</a>
                                 {{-- <a href="{{ route('berita') }}"><br>Selengkapnya</a>
@@ -238,14 +243,14 @@
                             <span class="subtitle">memberdayakan perempuan</span>
                             <h2>Memelihara hutan dengan keberlanjutan dan ketulusan demi masa depan</h2>
                             <p>Kami percaya pada kekuatan, ketulusan dan ketahanan dalam pengelolaan kehutanan. Di
-                                ITCI Hutani Manunggal, tim perempuan kami yang beragam memimpin upaya ini, mulai dari
+                                Itci Hutani Manunggal, tim perempuan kami yang beragam memimpin upaya ini, mulai dari
                                 konservasi hingga pengelolaan dengan sentuhan ketulusan yang didasari oleh pelatihan,
-                                kompetensi, dukungan serta kerjasama seluruh insan ITCI Hutani Manunggal.
+                                kompetensi, dukungan serta kerjasama seluruh insan Itci Hutani Manunggal.
                                 Bersama-sama, kita membentuk praktik kehutanan berkelanjutan dengan melindungi
                                 ekosistem, dan mendorong inovasi. Dengan dedikasi dan persatuan, kami tidak hanya
                                 menanam pohon, namun juga memupuk budaya di mana perempuan bisa berkembang, sehingga
                                 memberikan dampak jangka panjang pada industri dan dunia. Bergabunglah bersama kami
-                                saat kami membuka jalan menuju masa depan yang lebih hijau dan inkluswif.</p>
+                                saat kami membuka jalan menuju masa depan yang lebih hijau dan inklusif.</p>
                         </div>
                     </div>
                     <div class="col-lg-6">
@@ -267,8 +272,16 @@
             <!-- Section Title -->
             <div class="container section-title">
                 <h2>KEBERLANJUTAN</h2>
-                <p>Mengolah Pohon, Melestarikan Bumi. Janji Kami untuk Memelihara, Menumbuhkan, dan Melindungi Hutan
-                    Secara Berkelanjutan. Inovasi Ramah Lingkungan Berakar pada Setiap Kayu.</p>
+                <p>Membangun Komunitas, Menjaga Alam, Menciptakan Nilai. Kami percaya bahwa keberlanjutan
+                    hanya dapat dicapai dengan keseimbangan antara manusia, lingkungan, dan ekonomi.
+                    Karena itu, kami berkomitmen untuk memberdayakan masyarakat melalui peningkatan
+                    kesejahteraan dan kesempatan, melindungi kelestarian hutan serta lingkungan
+                    dengan praktik yang bertanggung jawab, serta menghadirkan manfaat ekonomi
+                    yang berkelanjutan bagi perusahaan, mitra, dan generasi mendatang.
+                    Prinsip inilah yang menjadi landasan setiap langkah kami dalam mengelola
+                    hutan secara berkelanjutan dan berorientasi masa depan.</p>
+                {{-- <p>Mengolah Pohon, Melestarikan Bumi. Janji Kami untuk Memelihara, Menumbuhkan, dan Melindungi Hutan
+                    Secara Berkelanjutan. Inovasi Ramah Lingkungan Berakar pada Setiap Kayu.</p> --}}
             </div><!-- End Section Title -->
 
             <div class="container">
@@ -328,7 +341,9 @@
             <!-- Section Title -->
             <div class="container section-title">
                 <h2>Berita</h2>
-
+                <p>Temukan kabar terbaru seputar kegiatan, program, dan perjalanan perusahaan kami. Dari aktivitas di
+                    lapangan hingga cerita keberlanjutan, kami berbagi informasi agar Anda selalu dekat dengan setiap
+                    langkah yang kami lakukan.</p>
             </div><!-- End Section Title -->
 
             <div class="container">
@@ -407,6 +422,10 @@
         <section id="features" class="features section">
             <div class="container section-title">
                 <h2>Fasilitas</h2>
+                <p>Kami menyediakan berbagai fasilitas yang mendukung operasional sekaligus mencerminkan komitmen perusahaan
+                    terhadap kenyamanan, efisiensi, dan keberlanjutan. Dari infrastruktur kerja hingga sarana pendukung di
+                    lapangan, setiap fasilitas dirancang untuk mendukung produktivitas sekaligus memberikan manfaat bagi
+                    karyawan dan lingkungan sekitar.</p>
 
             </div>
             <div class="container">
