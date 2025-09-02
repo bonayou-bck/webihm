@@ -37,7 +37,7 @@ class FasilitasController extends Controller
         // Simpan cover
         if ($request->hasFile('cover')) {
             $coverPath = $this->moveToPublicUpload($request->file('cover'), 'fasilitas/cover');
-            $data['cover'] = $coverPath; // hasilnya "upload/Fasilitas/cover/xxxxx.jpg"
+            $data['cover'] = $coverPath; // hasilnya "upload/fasilitas/cover/xxxxx.jpg"
         }
 
         // Simpan data utama
@@ -210,37 +210,32 @@ class FasilitasController extends Controller
     protected function moveToPublicUpload(UploadedFile $file, string $subdir): string
     {
         $subdir = trim($subdir, '/');
-        $targetDir = base_path('upload' . DIRECTORY_SEPARATOR . $subdir);
-    
+        $targetDir = public_path('upload' . DIRECTORY_SEPARATOR . $subdir);
+
         if (!is_dir($targetDir)) {
             @mkdir($targetDir, 0775, true);
         }
-    
+
         $ext = $file->getClientOriginalExtension() ?: 'jpg';
         $name = (string) Str::uuid() . '.' . $ext;
         $file->move($targetDir, $name);
-    
+
         // path relatif untuk disimpan ke DB
         return 'upload/' . $subdir . '/' . $name;
     }
 
     protected function deletePublicFileIfExists(?string $publicPath): void
     {
-        if (!$publicPath) {
-            return;
-        }
-
+        if (!$publicPath) return;
+        $candidates = [];
         if (str_starts_with($publicPath, 'upload/')) {
-            $relative = substr($publicPath, strlen('upload/'));
-            if (Storage::disk('public')->exists($relative)) {
-                Storage::disk('public')->delete($relative);
-            }
-            return;
+            $candidates[] = public_path($publicPath);
+            $candidates[] = base_path($publicPath);
+        } else {
+            $candidates[] = $publicPath;
         }
-
-        $full = public_path($publicPath);
-        if (is_file($full)) {
-            @unlink($full);
+        foreach ($candidates as $p) {
+            if ($p && is_file($p)) { @unlink($p); return; }
         }
     }
 }

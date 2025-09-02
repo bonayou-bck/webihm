@@ -81,15 +81,17 @@ class SertifikatController extends Controller
         $cf->description_id = $request->description_id;
 
         if ($request->hasFile('logo')) {
-            if ($cf->logo && file_exists(public_path($cf->logo))) {
-                @unlink(public_path($cf->logo));
+            if (!empty($cf->logo)) {
+                $paths = [public_path($cf->logo), base_path($cf->logo)];
+                foreach ($paths as $p) { if ($p && is_file($p)) { @unlink($p); } }
             }
             $cf->logo = $this->moveToUpload($request->file('logo'), 'logo');
         }
 
         if ($request->hasFile('showcase')) {
-            if ($cf->showcase && file_exists(public_path($cf->showcase))) {
-                @unlink(public_path($cf->showcase));
+            if (!empty($cf->showcase)) {
+                $paths = [public_path($cf->showcase), base_path($cf->showcase)];
+                foreach ($paths as $p) { if ($p && is_file($p)) { @unlink($p); } }
             }
             $cf->showcase = $this->moveToUpload($request->file('showcase'), 'showcase');
         }
@@ -122,7 +124,7 @@ class SertifikatController extends Controller
     protected function moveToUpload(UploadedFile $file, string $subdir): string
     {
         $subdir = trim($subdir, '/');
-        $targetDir = base_path('upload' . DIRECTORY_SEPARATOR . $subdir);
+        $targetDir = public_path('upload' . DIRECTORY_SEPARATOR . $subdir);
 
         if (!is_dir($targetDir)) {
             @mkdir($targetDir, 0775, true);

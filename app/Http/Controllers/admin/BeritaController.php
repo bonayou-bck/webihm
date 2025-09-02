@@ -83,8 +83,11 @@ class BeritaController extends Controller
         }
 
         if ($request->hasFile('cover')) {
-            if ($blog->cover && file_exists(base_path($blog->cover))) {
-                @unlink(base_path($blog->cover));
+            if (!empty($blog->cover)) {
+                $paths = [public_path($blog->cover), base_path($blog->cover)];
+                foreach ($paths as $p) {
+                    if ($p && is_file($p)) { @unlink($p); }
+                }
             }
             $blog->cover = $this->moveToUpload($request->file('cover'), 'berita');
         }
@@ -96,7 +99,7 @@ class BeritaController extends Controller
     protected function moveToUpload(UploadedFile $file, string $subdir): string
     {
         $subdir = trim($subdir, '/');
-        $targetDir = base_path('upload' . DIRECTORY_SEPARATOR . $subdir);
+        $targetDir = public_path('upload' . DIRECTORY_SEPARATOR . $subdir);
 
         if (!is_dir($targetDir)) {
             @mkdir($targetDir, 0775, true);
@@ -119,8 +122,11 @@ class BeritaController extends Controller
     {
         $blog = Blog::findOrFail($id);
 
-        if (!empty($blog->cover) && file_exists(base_path($blog->cover))) {
-            @unlink(base_path($blog->cover));
+        if (!empty($blog->cover)) {
+            $paths = [public_path($blog->cover), base_path($blog->cover)];
+            foreach ($paths as $p) {
+                if ($p && is_file($p)) { @unlink($p); }
+            }
         }
 
         $blog->delete();

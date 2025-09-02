@@ -40,13 +40,13 @@
                                 <td>{{ $row->description_id }}</td>
                                 <td>
                                     @if ($row->logo)
-                                        <img src="/{{ $row->logo }}" alt="Logo"
+                                        <img src="{{ asset(ltrim($row->logo, '/')) }}" alt="Logo"
                                             style="max-width:60px;max-height:60px;">
                                     @endif
                                 </td>
                                 <td>
                                     @if ($row->showcase)
-                                        <img src="/{{ $row->showcase }}" alt="Showcase"
+                                        <img src="{{ asset(ltrim($row->showcase, '/')) }}" alt="Showcase"
                                             style="max-width:60px;max-height:60px;">
                                     @endif
                                 </td>

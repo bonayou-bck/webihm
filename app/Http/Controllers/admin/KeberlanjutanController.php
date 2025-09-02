@@ -189,13 +189,16 @@ class KeberlanjutanController extends Controller
     
     protected function deletePublicFileIfExists(?string $publicPath): void
     {
-        if (!$publicPath || !str_starts_with($publicPath, 'upload/')) {
-            return;
+        if (!$publicPath) return;
+        $candidates = [];
+        if (str_starts_with($publicPath, 'upload/')) {
+            $candidates[] = public_path($publicPath);
+            $candidates[] = base_path($publicPath);
+        } else {
+            $candidates[] = $publicPath;
         }
-    
-        $fullPath = base_path($publicPath);
-        if (is_file($fullPath)) {
-            @unlink($fullPath);
+        foreach ($candidates as $p) {
+            if ($p && is_file($p)) { @unlink($p); return; }
         }
     }
 
@@ -223,18 +226,18 @@ class KeberlanjutanController extends Controller
 
     protected function moveToPublicUpload(UploadedFile $file, string $subdir): string
     {
-    $subdir = trim($subdir, '/');
-    $targetDir = base_path('upload' . DIRECTORY_SEPARATOR . $subdir);
+        $subdir = trim($subdir, '/');
+        $targetDir = public_path('upload' . DIRECTORY_SEPARATOR . $subdir);
 
-    if (!is_dir($targetDir)) {
-        @mkdir($targetDir, 0775, true);
-    }
+        if (!is_dir($targetDir)) {
+            @mkdir($targetDir, 0775, true);
+        }
 
-    $ext = $file->getClientOriginalExtension() ?: 'jpg';
-    $name = (string) Str::uuid() . '.' . $ext;
+        $ext = $file->getClientOriginalExtension() ?: 'jpg';
+        $name = (string) Str::uuid() . '.' . $ext;
 
-    $file->move($targetDir, $name);
+        $file->move($targetDir, $name);
 
-    return 'upload/' . $subdir . '/' . $name;
+        return 'upload/' . $subdir . '/' . $name;
     }
 }

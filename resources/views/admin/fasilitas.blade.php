@@ -41,7 +41,7 @@
                                 <td>{{ \Illuminate\Support\Str::limit(strip_tags($row->content), 60) }}</td>
                                 <td>
                                     @if ($row->cover)
-                                        <img src="/{{ $row->cover }}" alt="Cover"
+                                        <img src="{{ asset(ltrim($row->cover, '/')) }}" alt="Cover"
                                             style="max-width:60px;max-height:60px;border-radius:6px;">
                                     @endif
                                 </td>
