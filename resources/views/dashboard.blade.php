@@ -42,10 +42,10 @@
                             <h2>Perusahaan Yang Bergerak Dibidang Hutan Tanam Dengan Acacia Mangium Dan Eucalyptus Sp.
                             </h2>
                             <p>Perusahaan yang bergerak dibidang Hutan Tanam dengan Acacia Mangium dan Eucalyptus Sp.
-                                dengan luasan konsesi ±114,830 Ha terletak di Provinsi Kalimantan Timur yang telah
+                                dengan luasan konsesi ±112,868 Ha terletak di Provinsi Kalimantan Timur yang telah
                                 mendapatkan izin berusaha pemanfaatan hutan dengan nomor
-                                SK.198/Menlhk/Setjen/HPL.2/3/2022 yang dikeluarkan oleh Menteri Lingkungan Hidup Dan
-                                Kehutanan pada tanggal 10 Maret 2022.</p>
+                                SK.630/Menlhk/Setjen/HPL.2/6/2023 yang dikeluarkan oleh Menteri Lingkungan Hidup Dan
+                                Kehutanan pada tanggal 14 Juni 2023.</p>
                             <div class="cta-wrapper">
                                 <a href="{{ url('tentang') }}" class="btn btn-primary">Selengkapnya</a>
                                 {{-- <a href="{{ route('berita') }}"><br>Selengkapnya</a>

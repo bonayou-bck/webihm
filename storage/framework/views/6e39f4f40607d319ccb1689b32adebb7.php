@@ -9,7 +9,7 @@
   <div class="page-title dark-background" style="background-image: url('<?php echo e(asset('assets/img/bg/bg-14.JPG')); ?>');">
     <div class="container position-relative">
       <!-- <h1>Tentang</h1> -->
-      <h2>Perusahaan yang bergerak dibidang Hutan Tanam dengan Acacia Mangium dan Eucalyptus Sp. dengan luasan konsesi ±114,830 Ha terletak di Provinsi Kalimantan Timur yang telah mendapatkan izin berusaha pemanfaatan hutan dengan nomor SK.198/Menlhk/Setjen/HPL.2/3/2022 yang dikeluarkan oleh Menteri Lingkungan Hidup Dan Kehutanan pada tanggal 10 Maret 2022.</h2>
+      <h2>Perusahaan yang bergerak dibidang Hutan Tanam dengan Acacia Mangium dan Eucalyptus Sp. dengan luasan konsesi ±112,868 Ha terletak di Provinsi Kalimantan Timur yang telah mendapatkan izin berusaha pemanfaatan hutan dengan nomor SK.630/Menlhk/Setjen/HPL.2/6/2023 yang dikeluarkan oleh Menteri Lingkungan Hidup Dan Kehutanan pada tanggal 14 Juni 2023.</h2>
       <nav class="breadcrumbs">
         <ol>
           <!-- <li><a href="<?php echo e(route('dashboard')); ?>">Home</a></li> -->
@@ -47,10 +47,10 @@
         </div>
 
         <div class="service-content">
-          <div class="row gy-4">
-            <div class="col-md-6">
-              
-              <div class="service-features h-100">
+          
+          <div class="row gy-4 mb-4">
+            <div class="col-12">
+              <div class="service-features">
                 <div class="feature-item">
                   <div class="feature-content visi-text">
                     <h2>Visi</h2>
@@ -62,8 +62,11 @@
                 </div>
               </div>
             </div>
-            <div class="col-md-6">
-              
+          </div>
+
+          
+          <div class="row gy-4">
+            <div class="col-12">
               <div class="service-features mb-4">
                 <div class="feature-item">
                   <div class="feature-content">
