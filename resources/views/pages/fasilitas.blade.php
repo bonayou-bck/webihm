@@ -54,9 +54,8 @@
 
                                             <div class="card-body d-flex flex-column">
                                                 @php
-                                                    $excerpt = \Illuminate\Support\Str::limit(strip_tags($item->title ?? ''), 140);
+                                                    $excerpt = \Illuminate\Support\Str::limit(strip_tags($item->content ?? ''), 140);
                                                 @endphp
-
                                                 <p class="text-muted mb-3 small">{!! nl2br(e($excerpt)) !!}</p>
 
                                                 {{-- Small gallery thumbnails removed from card preview; gallery moved into Detail collapse to avoid clutter on cards --}}
@@ -155,4 +154,3 @@
   }
 </style>
 @endpush
-

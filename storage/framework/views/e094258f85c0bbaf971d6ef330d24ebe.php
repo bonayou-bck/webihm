@@ -96,7 +96,7 @@
                         </div>
                         <div class="col-12">
                             <label class="form-label">Konten</label>
-                            <textarea name="content" class="form-control" rows="4"></textarea>
+                            <textarea name="content" class="form-control js-wysiwyg" rows="4"></textarea>
                         </div>
 
                         <div class="col-12">
@@ -146,7 +146,7 @@
                         </div>
                         <div class="col-12">
                             <label class="form-label">Konten</label>
-                            <textarea name="content" id="editContent" class="form-control" rows="4"></textarea>
+                            <textarea name="content" id="editContent" class="form-control js-wysiwyg" rows="4"></textarea>
                         </div>
 
                         <div class="col-md-6">

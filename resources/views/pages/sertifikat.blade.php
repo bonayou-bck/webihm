@@ -28,7 +28,7 @@
                                         alt="{{ e($item->name_id) }}" loading="lazy">
                                     <div class="portfolio-info">
                                         <h4 class="mb-1">{{ $item->name_id }}</h4>
-                                        <p class="text-muted small mb-0">{{ $item->description_id }}</p>
+                                        <p class="text-muted small mb-0">{{ \Illuminate\Support\Str::limit(strip_tags($item->description_id ?? ''), 120) }}</p>
                                         <div class="portfolio-links">
                                             {{-- Open GLightbox dengan konten inline (side-by-side) --}}
                                             <a href="#{{ $lbId }}" class="glightbox"
@@ -50,7 +50,7 @@
                                         </div>
                                         <div class="lb-side">
                                             <h3 class="lb-title">{{ $item->name_id }}</h3>
-                                            <p class="lb-desc">{{ $item->description_id }}</p>
+                                            <div class="lb-desc prose-email">{!! $item->description_id !!}</div>
                                         </div>
                                     </div>
                                 </div>
@@ -136,6 +136,18 @@
                 max-height: 70vh;
             }
         }
+
+        /* Tipografi ala email: rapi dan mudah dibaca */
+        .prose-email { color:#243143; line-height:1.7; font-size:1rem; }
+        .prose-email p { margin: 0 0 .9rem; }
+        .prose-email h1,.prose-email h2,.prose-email h3,.prose-email h4,.prose-email h5,.prose-email h6{ margin:1.2rem 0 .6rem; font-weight:700; }
+        .prose-email ul,.prose-email ol{ margin:.4rem 0 1rem; padding-left:1.25rem; }
+        .prose-email li+li{ margin-top:.35rem; }
+        .prose-email blockquote{ margin:1rem 0; padding:.6rem 1rem; border-left:4px solid #d0d7de; background:#f8fafc; color:#475569; border-radius:6px; }
+        .prose-email img{ max-width:100%; height:auto; border-radius:8px; }
+        .prose-email a{ color:#0d6efd; text-decoration:underline; }
+        .prose-email table{ width:100%; border-collapse:collapse; margin:1rem 0; }
+        .prose-email th,.prose-email td{ border:1px solid #e5e7eb; padding:.5rem .75rem; }
     </style>
 @endpush
 

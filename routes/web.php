@@ -86,3 +86,22 @@ Route::middleware('guest')->group(function () {
 
 // logout route (hanya untuk user login)
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout')->middleware('auth');
+
+// LOCAL ONLY: Serve files from project-root /upload via /upload/* URLs (mimic hosting behavior)
+if (app()->environment('local')) {
+    Route::get('/upload/{path}', function (string $path) {
+        $relative = ltrim($path, '/');
+        $root = realpath(base_path('upload')) ?: base_path('upload');
+        $full = realpath(base_path('upload' . DIRECTORY_SEPARATOR . $relative));
+
+        if ($full === false || strpos($full, rtrim($root, DIRECTORY_SEPARATOR)) !== 0 || !is_file($full)) {
+            abort(404);
+        }
+
+        $mime = @mime_content_type($full) ?: 'application/octet-stream';
+        return response()->file($full, [
+            'Content-Type' => $mime,
+            'Cache-Control' => 'public, max-age=31536000',
+        ]);
+    })->where('path', '.*');
+}

@@ -91,7 +91,7 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Deskripsi</label>
-                        <textarea name="description_id" rows="4" class="form-control"></textarea>
+                        <textarea name="description_id" rows="4" class="form-control js-wysiwyg"></textarea>
                     </div>
                     <div class="row g-3">
                         <div class="col-md-6">
@@ -136,7 +136,7 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Deskripsi</label>
-                        <textarea name="description_id" id="edit_description_id" rows="4" class="form-control"></textarea>
+                        <textarea name="description_id" id="edit_description_id" rows="4" class="form-control js-wysiwyg"></textarea>
                     </div>
                     <div class="row g-3">
                         <div class="col-md-6">
@@ -189,6 +189,21 @@
             // Tooltip
             document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(el => new bootstrap.Tooltip(el));
 
+            // WYSIWYG init
+            if ($.fn.summernote) {
+                $('.js-wysiwyg').summernote({
+                    height: 220,
+                    toolbar: [
+                        ['style', ['style']],
+                        ['font', ['bold', 'italic', 'underline', 'clear']],
+                        ['para', ['ul', 'ol', 'paragraph']],
+                        ['insert', ['link', 'picture', 'table', 'hr']],
+                        ['view', ['codeview']]
+                    ],
+                    styleTags: ['p', 'blockquote', 'pre', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6']
+                });
+            }
+
             // Delegasi klik tombol Edit (tetap jalan setelah redraw)
             document.addEventListener('click', async function(ev) {
                 const btn = ev.target.closest('.btn-link.btn-primary');
@@ -214,10 +229,16 @@
                     const form = document.getElementById('formEdit');
                     form.action = `{{ url('admin/sertifikat') }}/${id}`;
 
-                    // Isi field termasuk SLUG
+                    // Isi field
                     document.getElementById('edit_id').value = row.id ?? '';
                     document.getElementById('edit_name_id').value = row.name_id ?? '';
-                    document.getElementById('edit_description_id').value = row.description_id ?? '';
+                    // Set deskripsi ke Summernote agar editor tidak kosong
+                    const $editDesc = $('#edit_description_id');
+                    if ($.fn.summernote && $editDesc.length) {
+                        $editDesc.summernote('code', row.description_id || '');
+                    } else {
+                        document.getElementById('edit_description_id').value = row.description_id ?? '';
+                    }
 
                     // Info + preview logo
                     const logoInfo = document.getElementById('edit_logo_info');
@@ -264,6 +285,9 @@
                     f.reset(); // kosongkan input termasuk file
                     f.classList.remove('was-validated');
                 }
+                if ($.fn.summernote) {
+                    $(this).find('.js-wysiwyg').each(function(){ $(this).summernote('code', ''); });
+                }
                 // bersihkan preview
                 const cover = document.getElementById('createCoverPreview');
                 const gal = document.getElementById('createPreview');
@@ -279,6 +303,9 @@
                     f.classList.remove('was-validated');
                     // kosongkan action kalau mau aman
                     // f.action = '';
+                }
+                if ($.fn.summernote) {
+                    $(this).find('.js-wysiwyg').each(function(){ $(this).summernote('code', ''); });
                 }
                 // bersihkan preview & state hapus
                 const cover = document.getElementById('editCoverPreview');

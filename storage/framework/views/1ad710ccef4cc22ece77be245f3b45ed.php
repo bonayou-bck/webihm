@@ -94,7 +94,7 @@
                         </div>
                         <div class="col-12">
                             <label class="form-label">Konten</label>
-                            <textarea name="content" class="form-control" rows="4"></textarea>
+                            <textarea name="content" class="form-control js-wysiwyg" rows="4"></textarea>
                         </div>
 
                         <div class="col-12">
@@ -145,7 +145,7 @@
                         </div>
                         <div class="col-12">
                             <label class="form-label">Konten</label>
-                            <textarea name="content" id="editContent" class="form-control" rows="4"></textarea>
+                            <textarea name="content" id="editContent" class="form-control js-wysiwyg" rows="4"></textarea>
                         </div>
 
                         <div class="col-12">
@@ -206,7 +206,7 @@
 
     <?php $__env->startPush('scripts'); ?>
         <script>
-            document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function() {
                 // DataTables init
                 if (!$.fn.DataTable.isDataTable('#tblKeberlanjutan')) {
                     $('#tblKeberlanjutan').DataTable({
@@ -221,6 +221,21 @@
                 }
                 // Tooltip
                 document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(el => new bootstrap.Tooltip(el));
+
+                // WYSIWYG init
+                if ($.fn.summernote) {
+                    $('.js-wysiwyg').summernote({
+                        height: 220,
+                        toolbar: [
+                            ['style', ['style']],
+                            ['font', ['bold', 'italic', 'underline', 'clear']],
+                            ['para', ['ul', 'ol', 'paragraph']],
+                            ['insert', ['link', 'picture', 'table', 'hr']],
+                            ['view', ['codeview']]
+                        ],
+                        styleTags: ['p', 'blockquote', 'pre', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6']
+                    });
+                }
 
                 // CREATE preview cover
                 document.getElementById('createCover')?.addEventListener('change', function() {
@@ -271,7 +286,7 @@
 
                 // OPEN EDIT MODAL
                 document.addEventListener('click', async function(ev) {
-                    const btn = ev.target.closest('.form-button-action .btn-link.btn-primary');
+                    const btn = ev.target.closest('.btn-link.btn-primary');
                     if (!btn) return;
                     let id = btn.getAttribute('data-id');
                     if (!id) {
@@ -294,7 +309,13 @@
 
                         document.getElementById('editTitle').value = data.title ?? '';
                         document.getElementById('editSlug').value = data.slug ?? '';
-                        document.getElementById('editContent').value = data.content ?? '';
+                        // Set konten ke Summernote bila tersedia agar editor tidak kosong
+                        const $editContent = $('#editContent');
+                        if ($.fn.summernote && $editContent.length) {
+                            $editContent.summernote('code', data.content || '');
+                        } else {
+                            document.getElementById('editContent').value = data.content ?? '';
+                        }
 
                         document.getElementById('editCover').value = '';
                         const coverBox = document.getElementById('editCoverPreview');
@@ -405,6 +426,9 @@
                         f.reset(); // kosongkan input termasuk file
                         f.classList.remove('was-validated');
                     }
+                    if ($.fn.summernote) {
+                        $(this).find('.js-wysiwyg').each(function(){ $(this).summernote('code', ''); });
+                    }
                     // bersihkan preview
                     const cover = document.getElementById('createCoverPreview');
                     const gal = document.getElementById('createPreview');
@@ -420,6 +444,9 @@
                         f.classList.remove('was-validated');
                         // kosongkan action kalau mau aman
                         // f.action = '';
+                    }
+                    if ($.fn.summernote) {
+                        $(this).find('.js-wysiwyg').each(function(){ $(this).summernote('code', ''); });
                     }
                     // bersihkan preview & state hapus
                     const cover = document.getElementById('editCoverPreview');

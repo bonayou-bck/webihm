@@ -88,7 +88,7 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Konten</label>
-                        <textarea name="content_id" rows="6" class="form-control"></textarea>
+                        <textarea name="content_id" rows="6" class="form-control js-wysiwyg"></textarea>
                     </div>
                     <div class="row">
                         <div class="col-12">
@@ -134,7 +134,7 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Konten</label>
-                        <textarea name="content_id" id="edit_content_id" rows="6" class="form-control"></textarea>
+                        <textarea name="content_id" id="edit_content_id" rows="6" class="form-control js-wysiwyg"></textarea>
                     </div>
                     <div class="row g-3">
                         <div class="col-md-6">
@@ -178,6 +178,21 @@
             // Tooltip
             document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(el => new bootstrap.Tooltip(el));
 
+            // WYSIWYG init
+            if ($.fn.summernote) {
+                $('.js-wysiwyg').summernote({
+                    height: 260,
+                    toolbar: [
+                        ['style', ['style']],
+                        ['font', ['bold', 'italic', 'underline', 'clear']],
+                        ['para', ['ul', 'ol', 'paragraph']],
+                        ['insert', ['link', 'picture', 'table', 'hr']],
+                        ['view', ['codeview']]
+                    ],
+                    styleTags: ['p', 'blockquote', 'pre', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6']
+                });
+            }
+
             // Delegasi klik tombol Edit (tetap jalan setelah redraw)
             document.addEventListener('click', async function(ev) {
                 const btn = ev.target.closest('.btn-link.btn-primary');
@@ -208,7 +223,13 @@
                     setVal('edit_id', row.id);
                     setVal('edit_title_id', row.title_id);
                     setVal('edit_slug_id', row.slug_id);
-                    setVal('edit_content_id', row.content_id);
+                    // Set konten ke Summernote bila tersedia agar editor tidak kosong
+                    const $editContent = $('#edit_content_id');
+                    if ($.fn.summernote && $editContent.length) {
+                        $editContent.summernote('code', row.content_id || '');
+                    } else {
+                        setVal('edit_content_id', row.content_id);
+                    }
                     // document.getElementById('edit_status').value = row.status ?? 'published';
 
                     // Info + preview cover
@@ -247,6 +268,10 @@
                     f.reset(); // kosongkan input termasuk file
                     f.classList.remove('was-validated');
                 }
+                // reset editor WYSIWYG
+                if ($.fn.summernote) {
+                    $(this).find('.js-wysiwyg').each(function(){ $(this).summernote('code', ''); });
+                }
                 // bersihkan preview
                 const cover = document.getElementById('createCoverPreview');
                 const gal = document.getElementById('createPreview');
@@ -262,6 +287,10 @@
                     f.classList.remove('was-validated');
                     // kosongkan action kalau mau aman
                     // f.action = '';
+                }
+                // reset editor WYSIWYG
+                if ($.fn.summernote) {
+                    $(this).find('.js-wysiwyg').each(function(){ $(this).summernote('code', ''); });
                 }
                 // bersihkan preview & state hapus
                 const cover = document.getElementById('editCoverPreview');

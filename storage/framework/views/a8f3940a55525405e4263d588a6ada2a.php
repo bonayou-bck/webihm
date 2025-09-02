@@ -52,9 +52,8 @@
 
                                             <div class="card-body d-flex flex-column">
                                                 <?php
-                                                    $excerpt = \Illuminate\Support\Str::limit(strip_tags($item->title ?? ''), 140);
+                                                    $excerpt = \Illuminate\Support\Str::limit(strip_tags($item->content ?? ''), 140);
                                                 ?>
-
                                                 <p class="text-muted mb-3 small"><?php echo nl2br(e($excerpt)); ?></p>
 
                                                 
@@ -153,6 +152,5 @@
   }
 </style>
 <?php $__env->stopPush(); ?>
-
 
 <?php echo $__env->make('layouts.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH /Users/bona/Downloads/webihm1/resources/views/pages/fasilitas.blade.php ENDPATH**/ ?>
