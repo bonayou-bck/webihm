@@ -273,7 +273,7 @@
 
                 // OPEN EDIT MODAL
                 document.addEventListener('click', async function(ev) {
-                    const btn = ev.target.closest('.form-button-action .btn-link.btn-primary');
+                    const btn = ev.target.closest('.btn-link.btn-primary');
                     if (!btn) return;
                     let id = btn.getAttribute('data-id');
                     if (!id) {

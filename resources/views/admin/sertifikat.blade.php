@@ -191,7 +191,7 @@
 
             // Delegasi klik tombol Edit (tetap jalan setelah redraw)
             document.addEventListener('click', async function(ev) {
-                const btn = ev.target.closest('.form-button-action .btn-link.btn-primary');
+                const btn = ev.target.closest('.btn-link.btn-primary');
                 if (!btn) return;
 
                 let id = btn.getAttribute('data-id');
@@ -273,7 +273,7 @@
 
             // RESET Modal Edit saat ditutup
             document.getElementById('modalEdit')?.addEventListener('hidden.bs.modal', function() {
-                const f = document.getElementById('editForm');
+                const f = document.getElementById('formEdit');
                 if (f) {
                     f.reset();
                     f.classList.remove('was-validated');

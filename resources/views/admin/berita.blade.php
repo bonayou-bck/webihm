@@ -47,8 +47,10 @@
                                             title="Edit" class="btn btn-link btn-primary btn-lg">
                                             <i class="fa fa-edit"></i>
                                         </button>
-                                        <button type="button" data-id="{{ $row->id }}" data-bs-toggle="tooltip" title="Remove"
-                                            class="btn btn-link btn-danger btn-delete">
+                                        <button type="button" data-id="{{ $row->id }}" data-bs-toggle="modal"
+                                            data-bs-target="#deleteConfirmationModal" title="Remove"
+                                            data-url="{{ url('admin/berita') }}/{{ $row->id }}"
+                                            class="btn btn-link btn-danger">
                                             <i class="fa fa-times"></i>
                                         </button>
                                     </div>
@@ -61,11 +63,7 @@
         </div>
     </div>
 
-    {{-- Hidden delete form (server-rendered) --}}
-    <form id="deleteForm" method="POST" style="display:none;">
-        @csrf
-        @method('DELETE')
-    </form>
+    {{-- Hapus hidden delete form: gunakan modal konfirmasi global di layouts.admin --}}
 
     {{-- Modal: Tambah Berita (tetap) --}}
     <div class="modal fade" id="modalCreate" tabindex="-1" aria-hidden="true">
@@ -182,7 +180,7 @@
 
             // Delegasi klik tombol Edit (tetap jalan setelah redraw)
             document.addEventListener('click', async function(ev) {
-                const btn = ev.target.closest('.form-button-action .btn-link.btn-primary');
+                const btn = ev.target.closest('.btn-link.btn-primary');
                 if (!btn) return;
 
                 let id = btn.getAttribute('data-id');
@@ -205,14 +203,12 @@
                     const form = document.getElementById('formEdit');
                     form.action = `{{ url('admin/berita') }}/${id}`;
 
-                    // Isi field termasuk SLUG
-                    document.getElementById('edit_id').value = row.id ?? '';
-                    document.getElementById('edit_title_id').value = row.title_id ?? '';
-                    document.getElementById('edit_title_en').value = row.title_en ?? '';
-                    document.getElementById('edit_slug_id').value = row.slug_id ?? '';
-                    document.getElementById('edit_slug_en').value = row.slug_en ?? '';
-                    document.getElementById('edit_content_id').value = row.content_id ?? '';
-                    document.getElementById('edit_content_en').value = row.content_en ?? '';
+                    // Isi field termasuk SLUG (gunakan field yang ada)
+                    const setVal = (id, val) => { const el = document.getElementById(id); if (el) el.value = val ?? ''; };
+                    setVal('edit_id', row.id);
+                    setVal('edit_title_id', row.title_id);
+                    setVal('edit_slug_id', row.slug_id);
+                    setVal('edit_content_id', row.content_id);
                     // document.getElementById('edit_status').value = row.status ?? 'published';
 
                     // Info + preview cover
@@ -243,17 +239,7 @@
                 }
             });
 
-            // Delegated delete handler so it still works after DataTables redraws
-            document.addEventListener('click', function(ev) {
-                const btn = ev.target.closest('.btn-delete');
-                if (!btn) return;
-                const id = btn.getAttribute('data-id');
-                if (!id) return;
-                // if (!confirm('Yakin hapus berita ini?')) return;
-                const form = document.getElementById('deleteForm');
-                form.action = `{{ url('admin/berita') }}/${id}`;
-                form.submit();
-            });
+            // Hapus handler delete lama: kini pakai modal konfirmasi global
             // RESET Modal Create saat ditutup
             document.getElementById('modalCreate')?.addEventListener('hidden.bs.modal', function() {
                 const f = this.querySelector('form');
@@ -270,7 +256,7 @@
 
             // RESET Modal Edit saat ditutup
             document.getElementById('modalEdit')?.addEventListener('hidden.bs.modal', function() {
-                const f = document.getElementById('editForm');
+                const f = document.getElementById('formEdit');
                 if (f) {
                     f.reset();
                     f.classList.remove('was-validated');

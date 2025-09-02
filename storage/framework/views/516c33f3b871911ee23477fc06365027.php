@@ -1,15 +1,15 @@
-<?php $__env->startSection('title', 'Berita'); ?>
-<?php $__env->startSection('scripts', 'Berita'); ?>
+<?php $__env->startSection('title', 'Sertifikat'); ?>
+<?php $__env->startSection('scripts', 'Sertifikat'); ?>
 <?php $__env->startSection('content'); ?>
 
     <div class="d-flex align-items-left align-items-md-center flex-column flex-md-row pt-2 pb-3">
         <div>
-            <h3 class="fw-bold mb-1">Berita</h3>
-            <div class="text-muted">Kelola artikel berita & pembaruan.</div>
+            <h3 class="fw-bold mb-1">Sertifikat</h3>
+            
         </div>
         <div class="ms-md-auto py-2 py-md-0">
             <button class="btn btn-primary btn-round" data-bs-toggle="modal" data-bs-target="#modalCreate">
-                <i class="bi bi-plus-circle"></i> Tambah Berita
+                <i class="bi bi-plus-circle"></i> Tambah Sertifikat
             </button>
         </div>
     </div>
@@ -18,25 +18,35 @@
         
         <div class="tab-pane fade show active" id="tab-pub" role="tabpanel">
             <div class="table-responsive">
-                <table id="tblBerita" class="table table-striped table-bordered align-middle w-100">
+                <table id="tblSertifikat" class="table table-striped table-bordered align-middle w-100">
                     <thead>
                         <tr>
                             <th style="width:36px">#</th>
-                            <th>Judul</th>
-                            <th>slug</th>
+                            <th>Nama</th>
+                            <th>Deskripsi (ID)</th>
+                            <th>Logo</th>
+                            <th>Showcase</th>
                             <th>Updated</th>
                             <th style="width:140px">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <?php $__currentLoopData = $blog; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $i => $row): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <?php $__currentLoopData = $cf; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $i => $row): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <tr data-id="<?php echo e($row->id); ?>">
                                 <td><?php echo e($i + 1); ?></td>
+                                <td><?php echo e($row->name_id); ?></td>
+                                <td><?php echo e($row->description_id); ?></td>
                                 <td>
-                                    <div class="fw-semibold"><?php echo e($row->title_id); ?></div>
+                                    <?php if($row->logo): ?>
+                                        <img src="/<?php echo e($row->logo); ?>" alt="Logo"
+                                            style="max-width:60px;max-height:60px;">
+                                    <?php endif; ?>
                                 </td>
                                 <td>
-                                    <div class="fw-semibold"><?php echo e($row->slug_id); ?></div>
+                                    <?php if($row->showcase): ?>
+                                        <img src="/<?php echo e($row->showcase); ?>" alt="Showcase"
+                                            style="max-width:60px;max-height:60px;">
+                                    <?php endif; ?>
                                 </td>
                                 <td class="small text-muted"><?php echo e($row->updated_at?->format('d M Y H:i')); ?></td>
                                 <td>
@@ -47,7 +57,7 @@
                                         </button>
                                         <button type="button" data-id="<?php echo e($row->id); ?>" data-bs-toggle="modal"
                                             data-bs-target="#deleteConfirmationModal" title="Remove"
-                                            data-url="<?php echo e(url('admin/berita')); ?>/<?php echo e($row->id); ?>"
+                                            data-url="<?php echo e(url('admin/sertifikat')); ?>/<?php echo e($row->id); ?>"
                                             class="btn btn-link btn-danger">
                                             <i class="fa fa-times"></i>
                                         </button>
@@ -62,37 +72,35 @@
     </div>
 
     
-
-    
     <div class="modal fade" id="modalCreate" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-scrollable">
-            <form class="modal-content" method="POST" action="<?php echo e(url('admin/berita-create')); ?>"
+            <form class="modal-content" method="POST" action="<?php echo e(url('admin/sertifikat-create')); ?>"
                 enctype="multipart/form-data">
                 <?php echo csrf_field(); ?>
                 <div class="modal-header">
-                    <h5 class="modal-title">Tambah Berita</h5>
+                    <h5 class="modal-title">Tambah Sertifikat</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label class="form-label">Judul</label>
-                        <input type="text" name="title_id" class="form-control">
-                    </div>
-                    
-                    <div class="mb-3">
-                        <label class="form-label">Slug</label>
-                        <input type="text" name="slug_id" class="form-control">
+                        <label class="form-label">Nama</label>
+                        <input type="text" name="name_id" class="form-control">
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">Konten</label>
-                        <textarea name="content_id" rows="6" class="form-control"></textarea>
+                        <label class="form-label">Deskripsi</label>
+                        <textarea name="description_id" rows="4" class="form-control"></textarea>
                     </div>
-                    <div class="row">
-                        <div class="col-12">
-                            <label class="form-label">Cover</label>
-                            <input type="file" name="cover" class="form-control" accept="image/*">
-                            <div class="form-text">File akan disimpan ke <code>public/upload/berita</code></div>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Logo</label>
+                            <input type="file" name="logo" class="form-control" accept="image/*">
+                            <div class="form-text">File akan disimpan ke <code>public/upload/sertifikat</code></div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Showcase</label>
+                            <input type="file" name="showcase" class="form-control" accept="image/*">
+                            <div class="form-text">File akan disimpan ke <code>public/upload/sertifikat</code></div>
                         </div>
                     </div>
                 </div>
@@ -114,33 +122,36 @@
                 <?php echo method_field('PUT'); ?>
 
                 <div class="modal-header">
-                    <h5 class="modal-title">Detail Berita</h5>
+                    <h5 class="modal-title">Detail Sertifikat</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
                 <div class="modal-body">
                     <input type="hidden" name="id" id="edit_id">
-
                     <div class="mb-3">
-                        <label class="form-label">Judul</label>
-                        <input type="text" name="title_id" id="edit_title_id" class="form-control">
-                    </div>
-                    
-                    <div class="mb-3">
-                        <label class="form-label">Slug</label>
-                        <input type="text" name="slug_id" id="edit_slug_id" class="form-control">
+                        <label class="form-label">Nama</label>
+                        <input type="text" name="name_id" id="edit_name_id" class="form-control">
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">Konten</label>
-                        <textarea name="content_id" id="edit_content_id" rows="6" class="form-control"></textarea>
+                        <label class="form-label">Deskripsi</label>
+                        <textarea name="description_id" id="edit_description_id" rows="4" class="form-control"></textarea>
                     </div>
                     <div class="row g-3">
                         <div class="col-md-6">
-                            <label class="form-label">Ganti Cover (opsional)</label>
-                            <input type="file" name="cover" class="form-control" accept="image/*">
-                            <div class="small text-muted mt-2" id="edit_cover_info">Belum ada cover.</div>
-                            <div class="mt-2" id="edit_cover_wrap" style="display:none;">
-                                <img id="edit_cover_preview" src="" alt="Cover saat ini"
+                            <label class="form-label">Ganti Logo (opsional)</label>
+                            <input type="file" name="logo" class="form-control" accept="image/*">
+                            <div class="small text-muted mt-2" id="edit_logo_info">Belum ada logo.</div>
+                            <div class="mt-2" id="edit_logo_wrap" style="display:none;">
+                                <img id="edit_logo_preview" src="" alt="Logo saat ini"
+                                    class="img-fluid rounded border">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Ganti Showcase (opsional)</label>
+                            <input type="file" name="showcase" class="form-control" accept="image/*">
+                            <div class="small text-muted mt-2" id="edit_showcase_info">Belum ada showcase.</div>
+                            <div class="mt-2" id="edit_showcase_wrap" style="display:none;">
+                                <img id="edit_showcase_preview" src="" alt="Showcase saat ini"
                                     class="img-fluid rounded border">
                             </div>
                         </div>
@@ -161,8 +172,8 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // DataTables init (aman dari re-init)
-            if (!$.fn.DataTable.isDataTable('#tblBerita')) {
-                $('#tblBerita').DataTable({
+            if (!$.fn.DataTable.isDataTable('#tblSertifikat')) {
+                $('#tblSertifikat').DataTable({
                     pageLength: 5,
                     autoWidth: false,
                     order: [],
@@ -189,40 +200,48 @@
                 if (!id) return;
 
                 try {
-                    const res = await fetch(`<?php echo e(url('admin/berita')); ?>/${id}`, {
+                    const res = await fetch(`<?php echo e(url('admin/sertifikat')); ?>/${id}`, {
                         headers: {
                             'X-Requested-With': 'XMLHttpRequest'
                         }
                     });
-                    // if (!res.ok) throw new Error('Gagal mengambil data (HTTP ' + res.status + ')');
+                    if (!res.ok) throw new Error('Gagal mengambil data (HTTP ' + res.status + ')');
                     const row = await res.json();
 
                     // Set action form PUT /admin/berita/{id}
                     const form = document.getElementById('formEdit');
-                    form.action = `<?php echo e(url('admin/berita')); ?>/${id}`;
+                    form.action = `<?php echo e(url('admin/sertifikat')); ?>/${id}`;
 
-                    // Isi field termasuk SLUG (gunakan field yang ada)
-                    const setVal = (id, val) => { const el = document.getElementById(id); if (el) el.value = val ?? ''; };
-                    setVal('edit_id', row.id);
-                    setVal('edit_title_id', row.title_id);
-                    setVal('edit_slug_id', row.slug_id);
-                    setVal('edit_content_id', row.content_id);
-                    // document.getElementById('edit_status').value = row.status ?? 'published';
+                    // Isi field termasuk SLUG
+                    document.getElementById('edit_id').value = row.id ?? '';
+                    document.getElementById('edit_name_id').value = row.name_id ?? '';
+                    document.getElementById('edit_description_id').value = row.description_id ?? '';
 
-                    // Info + preview cover
-                    const info = document.getElementById('edit_cover_info');
-                    const wrap = document.getElementById('edit_cover_wrap');
-                    const img = document.getElementById('edit_cover_preview');
-
-                    if (row.cover) {
-                        info.innerHTML = 'Cover saat ini: <code>' + row.cover + '</code>';
-                        img.src =
-                        `<?php echo e(url('/')); ?>/${row.cover}`; // row.cover = 'upload/berita/xxx.jpg'
-                        wrap.style.display = '';
+                    // Info + preview logo
+                    const logoInfo = document.getElementById('edit_logo_info');
+                    const logoWrap = document.getElementById('edit_logo_wrap');
+                    const logoImg = document.getElementById('edit_logo_preview');
+                    if (row.logo) {
+                        logoInfo.innerHTML = 'Logo saat ini: <code>' + row.logo + '</code>';
+                        logoImg.src = `<?php echo e(url('/')); ?>/${row.logo}`;
+                        logoWrap.style.display = '';
                     } else {
-                        info.textContent = 'Belum ada cover.';
-                        img.removeAttribute('src');
-                        wrap.style.display = 'none';
+                        logoInfo.textContent = 'Belum ada logo.';
+                        logoImg.removeAttribute('src');
+                        logoWrap.style.display = 'none';
+                    }
+                    // Info + preview showcase
+                    const showcaseInfo = document.getElementById('edit_showcase_info');
+                    const showcaseWrap = document.getElementById('edit_showcase_wrap');
+                    const showcaseImg = document.getElementById('edit_showcase_preview');
+                    if (row.showcase) {
+                        showcaseInfo.innerHTML = 'Showcase saat ini: <code>' + row.showcase + '</code>';
+                        showcaseImg.src = `<?php echo e(url('/')); ?>/${row.showcase}`;
+                        showcaseWrap.style.display = '';
+                    } else {
+                        showcaseInfo.textContent = 'Belum ada showcase.';
+                        showcaseImg.removeAttribute('src');
+                        showcaseWrap.style.display = 'none';
                     }
 
                     const modalEditEl = document.getElementById('modalEdit');
@@ -233,11 +252,9 @@
                     modalEdit.show();
                 } catch (err) {
                     console.error(err);
-                    alert('Tidak dapat memuat data berita.');
+                    alert('Tidak dapat memuat data sertifikat.');
                 }
             });
-
-            // Hapus handler delete lama: kini pakai modal konfirmasi global
             // RESET Modal Create saat ditutup
             document.getElementById('modalCreate')?.addEventListener('hidden.bs.modal', function() {
                 const f = this.querySelector('form');
@@ -272,8 +289,9 @@
                 if (delIds) delIds.value = '';
                 window.fasilitasDelSet = new Set();
             });
+
         });
     </script>
 <?php $__env->stopPush(); ?>
 
-<?php echo $__env->make('layouts.admin', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH /Users/bona/Downloads/webihm1/resources/views/admin/berita.blade.php ENDPATH**/ ?>
+<?php echo $__env->make('layouts.admin', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH /Users/bona/Downloads/webihm1/resources/views/admin/sertifikat.blade.php ENDPATH**/ ?>

@@ -15,7 +15,7 @@ class LoginController extends Controller
      * Where to redirect users after login.
      * (dibiarkan sesuai kode kamu)
      */
-    protected $redirectTo = '/admin/dashboard';
+    protected $redirectTo = '/admin';
 
     public function __construct()
     {
