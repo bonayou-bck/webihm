@@ -3,17 +3,14 @@
 
 @section('title', 'Keberlanjutan')
 @section('body_class', 'keberlanjutan-page')
-
 @section('content')
     <main class="main">
 
         <!-- Page Title -->
-        <div class="page-title dark-background" style="background-image: url('{{ asset('assets/img/bg/bg-14.JPG') }}');">
+        <div class="page-title dark-background" style="background-image:url('{{ asset('assets/img/bg/bg-14.JPG') }}');">
             <div class="container position-relative">
-                <h1 class="mb-2">Keberlanjutan</h1>
-                <nav class="breadcrumbs">
-                    <ol></ol>
-                </nav>
+                <h1>Keberlanjutan</h1>
+                <h2>Membangun Komunitas, Menjaga Alam, Menciptakan Nilai. Kami berkomitmen untuk memberdayakan masyarakat melalui peningkatan kesejahteraan dan melindungi kelestarian hutan dengan praktik yang bertanggung jawab.</h2>
             </div>
         </div>
         <!-- End Page Title -->
@@ -126,9 +123,14 @@
             --glass-border: rgba(255,255,255,0.14);
         }
 
-        .page-title.dark-background{ padding: 5.5rem 0; background-size:cover; background-position:center; position:relative; }
-        .page-title .lead{ max-width: 780px; color: rgba(255,255,255,0.9); }
-        .hero-accent{ position:absolute; right:2rem; top:2.5rem; opacity:0.9; filter: drop-shadow(0 8px 30px rgba(22,163,74,0.08)); }
+        /* Hero accent removed as it's handled by global styles */
+        .hero-accent{ 
+            position:absolute; 
+            right:2rem; 
+            top:2.5rem; 
+            opacity:0.9; 
+            filter: drop-shadow(0 8px 30px rgba(22,163,74,0.08)); 
+        }
 
         .keb-card{ border-radius: 16px; overflow: hidden; background: linear-gradient(180deg, rgba(255,255,255,0.65) 0%, rgba(243,250,240,0.55) 100%); backdrop-filter: blur(6px); border: 1px solid var(--glass-border); }
 
@@ -162,7 +164,6 @@
         /* responsive adjustments */
         @media (max-width: 991px){
             .keb-card .thumb{ min-height: 200px; }
-            .page-title.dark-background{ padding: 3.5rem 0; }
             .hero-accent{ display:none; }
         }
     </style>

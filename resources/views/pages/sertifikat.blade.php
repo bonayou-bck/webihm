@@ -9,11 +9,8 @@
         {{-- HERO --}}
         <div class="page-title dark-background" style="background-image:url('{{ asset('assets/img/bg/bg-14.JPG') }}');">
             <div class="container position-relative">
-                <h1 class="mb-3">Sertifikat</h1>
-                <p class="lead lead-muted">
-                    Mengolah Pohon, Melestarikan Bumi. Janji Kami untuk Memelihara, Menumbuhkan, dan
-                    Melindungi Hutan Secara Berkelanjutan. Inovasi Ramah Lingkungan Berakar pada Setiap Kayu.
-                </p>
+                <h1>Sertifikat</h1>
+                <h2>Komitmen kami terhadap standar internasional dan praktik terbaik industri kehutanan. Sertifikasi kami membuktikan dedikasi dalam mengelola hutan secara lestari, menjaga lingkungan, dan memastikan keselamatan kerja.</h2>
             </div>
         </div>
 

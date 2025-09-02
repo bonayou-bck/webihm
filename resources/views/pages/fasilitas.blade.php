@@ -9,10 +9,8 @@
         <!-- Page Title -->
         <div class="page-title dark-background" style="background-image: url('{{ asset('assets/img/bg/bg-14.JPG') }}');">
             <div class="container position-relative">
-                <h1 class="mb-2">Fasilitas</h1>
-                <nav class="breadcrumbs">
-                    <ol></ol>
-                </nav>
+                <h1>Fasilitas</h1>
+                <h2>Kami menyediakan berbagai fasilitas yang mendukung operasional sekaligus mencerminkan komitmen perusahaan terhadap kenyamanan, efisiensi, dan keberlanjutan. Dari infrastruktur kerja hingga sarana pendukung di lapangan.</h2>
             </div>
         </div>
         <!-- End Page Title -->

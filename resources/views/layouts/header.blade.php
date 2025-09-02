@@ -1,6 +1,6 @@
 <header id="header" class="header fixed-top">
 
-    <div class="topbar d-flex align-items-center dark-background">
+    {{-- <div class="topbar d-flex align-items-center dark-background">
       <div class="container d-flex justify-content-center justify-content-md-between">
         <div class="contact-info d-flex align-items-center">
           <i class="bi bi-envelope d-flex align-items-center"><a href="mailto:contact@example.com">info@itcihutanimanunggal.com</a></i>
@@ -13,7 +13,7 @@
           <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
         </div>
       </div>
-    </div><!-- End Top Bar -->
+    </div><!-- End Top Bar --> --}}
 
     <div class="branding d-flex align-items-cente">
 
@@ -26,7 +26,6 @@
 
         <nav id="navmenu" class="navmenu">
           <ul>
-            <li><a href="{{ route('dashboard') }}">Beranda</a></li>
             <li><a href="{{ route('pages.tentang') }}">Tentang</a></li>
             <li><a href="{{ route('pages.sertifikat') }}">Sertifikat</a></li>
             <li><a href="{{ route('pages.keberlanjutan') }}">Keberkelanjutan</a></li>

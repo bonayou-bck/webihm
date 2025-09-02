@@ -28,6 +28,7 @@
 
     <!-- Main CSS File -->
     <link href="{{ asset('assets/css/main.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/css/page-title.css') }}" rel="stylesheet">
 
     @stack('head')
     @stack('styles')

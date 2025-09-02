@@ -28,6 +28,7 @@
 
     <!-- Main CSS File -->
     <link href="<?php echo e(asset('assets/css/main.css')); ?>" rel="stylesheet">
+    <link href="<?php echo e(asset('assets/css/page-title.css')); ?>" rel="stylesheet">
 
     <?php echo $__env->yieldPushContent('head'); ?>
     <?php echo $__env->yieldPushContent('styles'); ?>

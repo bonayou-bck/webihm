@@ -39,7 +39,7 @@
         <div class="page-title dark-background" style="background-image:url('<?php echo e(asset('assets/img/bg/bg-14.JPG')); ?>');">
             <div class="container position-relative">
                 <h1>Berita</h1>
-                <p>Update informasi dan kegiatan terbaru ITCI Hutani Manunggal.</p>
+                <h2>Temukan kabar terbaru seputar kegiatan, program, dan perjalanan perusahaan kami. Dari aktivitas di lapangan hingga cerita keberlanjutan, kami berbagi informasi agar Anda selalu dekat dengan setiap langkah yang kami lakukan.</h2>
             </div>
         </div>
 
